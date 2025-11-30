@@ -40,8 +40,19 @@ const login = () => {
             Sign In
         </button>
 
-        
+        <article>
+
+        <input type="checkbox" />
+
+        <p>
+            Remember Me
+        </p>
+
+        </article>
+
+
     </section>
+
     </> );
 }
  
