@@ -3,6 +3,17 @@
     src: url(../assets/Fonts/Panchang-Regular.otf);
 }
 
+.LoginSec{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+    gap: 24px;
+}
+
 .LoginHeader{
     display: flex;
     flex-direction: row;
@@ -12,10 +23,11 @@
     padding: 16px;
     font-family: Panchang;
     color: #FFF;
-    font-size: 16px;
+    font-size: 24px;
 }
 
-.MailField{
+.MailField,.PassField{
+    width: 40%;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -23,3 +35,44 @@
     font-family: Panchang;
     color: #FFF;
 }
+
+.MailInput,.PassInput{
+    width: 100%;
+    height: 90%;
+    border: 2px solid #FFD27D;
+    border-radius: 20px;
+    padding: 16px 20px;
+    background-color: #652300;
+    font-family: Panchang;
+}
+
+.forgot p{
+    color: #FFD27D;
+    text-decoration: dashed underline 1px;
+}
+
+.SigninButton{
+    background-color: #FFD27D;
+    font-family: Panchang;
+    color: #652300;
+    font-size: 16px;
+    padding: 16px 32px;
+    border-radius: 20px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.SigninButton:hover{
+    background-color: #652300;
+    color: #FFD27D;
+    border: #FFD27D 1px solid;
+}
+
+.RememberButton{
+    display: flex;
+    flex-direction: row;
+    font-family: Panchang;
+    color: #FFF;
+    gap: 16px;
+}
+
