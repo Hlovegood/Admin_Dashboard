@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom'
 const login = () => {
     return ( <>
     <section>
-        <article>
+        <article className='LoginHeader'>
             <img src={User} alt="User Icon" />
 
             <p>
@@ -13,7 +13,7 @@ const login = () => {
             </p>
         </article>
 
-        <article>
+        <article className='MailField'>
             <h2>
                 E-mail
             </h2>
@@ -21,7 +21,7 @@ const login = () => {
             <input type="e-mail" placeholder='Enter E-mail here' />
         </article>
 
-        <article>
+        <article className='PassField'>
             <h2>
                 Password
             </h2>
@@ -36,11 +36,11 @@ const login = () => {
             </Link>
         </article>
 
-        <button>
+        <button className='SigninButton'>
             Sign In
         </button>
 
-        <article>
+        <article className='RememberButton'>
 
         <input type="checkbox" />
 
