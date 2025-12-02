@@ -6,5 +6,8 @@
     gap: 16px;
     font-family: Panchang;
     color: #FFB574;
-    
+}
+
+p{
+    text-decoration: none;
 }

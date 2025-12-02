@@ -1,14 +1,19 @@
 nav{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     height: 100vh;
     padding: 24px;
     float: left;
+    border: 1px solid #7e600ce7;
 }
 
 ul{
     list-style: none;
     padding: 24px;
+}
+
+Link{
+    text-decoration: none;
 }
