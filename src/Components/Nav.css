@@ -1,7 +1,7 @@
 nav{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: flex-start;
     height: 100vh;
     padding: 24px;
@@ -11,8 +11,13 @@ nav{
 }
 
 ul{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     list-style: none;
     padding: 24px;
+    margin: 0;
 }
 
 Link{

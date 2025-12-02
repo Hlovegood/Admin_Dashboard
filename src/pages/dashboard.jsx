@@ -1,6 +1,7 @@
 import React from 'react';
 import Nav from '../Components/Nav';
 import { Helmet } from 'react-helmet';
+import TopBar from '../Components/TopBar';
 
 const dashboard = () => {
     return ( <>
@@ -14,6 +15,11 @@ const dashboard = () => {
       </Helmet>
     <Nav/>
     
+    <section>
+      <TopBar/>
+
+
+    </section>
     </> );
 }
  
