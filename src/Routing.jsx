@@ -6,11 +6,11 @@ import ScrollToTop from './Components/ScrollToTop';
 const Routing = () => {
     return ( <>
     <BrowserRouter>
+        <ScrollToTop/>
     
     <Routes>
-        <ScrollToTop/>
         <Route path="/" element={<Login />} />
-        <Route path ="/home" element ={<Dashboard />}/>
+        <Route path ="/dashboard" element ={<Dashboard />}/>
 
 
 

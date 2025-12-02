@@ -1,14 +1,34 @@
-import React from 'react';
-import './Login.css';
-import User from '../assets/Icons/User Icon.png';
-import {Link} from 'react-router-dom';
-import DotGrid from '../Components/DotGrid';
-const login = () => {
+import React, {useState} from "react";
+import { Helmet } from "react-helmet";
+import "./Login.css";
+import User from "../assets/Icons/User Icon.png";
+import { Link, useNavigate} from "react-router-dom";
+import DotGrid from "../Components/DotGrid";
+const Login = () => {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    
+    const handleSignIn = () => {
+        if (!email.trim() || !password.trim()) {
+            alert('Please fill in both email and password fields');
+            return;
+        }
+        
+        navigate('/dashboard');
+    };
 
+  return (
+    <>
 
-    return ( <>
+          <Helmet>
+        <title>Login</title>
+        <meta
+          name="description"
+          content="This is the Login Page for the admin dashboard"
+        />
+        <meta property="og:title" content="Login" />
+      </Helmet>
       <div style={{ position: "relative", width: "100%", minHeight: "100vh" }}>
         <div
           style={{
@@ -33,62 +53,56 @@ const login = () => {
             returnDuration={3.5}
           />
         </div>
-    <section className='LoginSec'>
-        <article className='LoginHeader'>
+        <section className="LoginSec">
+          <article className="LoginHeader">
             <img src={User} alt="User Icon" />
 
-            <p>
-                Login
-            </p>
-        </article>
+            <p>Login</p>
+          </article>
 
-        <article className='MailField'>
-            <h3>
-                E-mail
-            </h3>
+          <article className="MailField">
+            <h3>E-mail</h3>
 
-            <input type="e-mail" placeholder='Enter E-mail here' className='MailInput'/>
-        </article>
+            <input
+              type="email"
+              placeholder="Enter E-mail here"
+              className="MailInput"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </article>
 
-        <article className='PassField'>
-            <h3>
-                Password
-            </h3>
+          <article className="PassField">
+            <h3>Password</h3>
 
-            <input type="password" placeholder='Enter Password here' className='PassInput' />
+            <input
+              type="password"
+              placeholder="Enter Password here"
+              className="PassInput"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-            <article className='forgot'>
-            <Link>
-                <p>
-                    Forgot Password?
-                </p>
-            </Link>
-
+            <article className="forgot">
+              <Link>
+                <p>Forgot Password?</p>
+              </Link>
             </article>
-        </article>
+          </article>
 
-        <button className='SigninButton'>
+          <button onClick={handleSignIn} className="SigninButton">
             Sign In
-        </button>
+          </button>
 
-        <article className='RememberButton'>
+          <article className="RememberButton">
+            <input type="checkbox" />
 
-        <input type="checkbox" />
+            <p>Remember Me</p>
+          </article>
+        </section>
+      </div>
+    </>
+  );
+};
 
-        <p>
-            Remember Me
-        </p>
-
-        </article>
-
-
-    </section>
-
-        </div>
-        
-
-
-    </> );
-}
- 
-export default login;
+export default Login;
