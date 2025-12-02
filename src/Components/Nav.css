@@ -7,7 +7,7 @@ nav{
     padding: 24px;
     float: left;
     border: 1px solid #7e600ce7;
-    position: fixed;
+    position: relative;
 }
 
 ul{
