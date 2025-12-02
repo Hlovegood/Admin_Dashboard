@@ -1,7 +1,9 @@
 import React from 'react';
+import './dashboard.css'
 import Nav from '../Components/Nav';
 import { Helmet } from 'react-helmet';
 import TopBar from '../Components/TopBar';
+import PageTitle from '../common/PageTitle';
 
 const dashboard = () => {
     return ( <>
@@ -15,10 +17,10 @@ const dashboard = () => {
       </Helmet>
     <Nav/>
     
-    <section>
       <TopBar/>
+    <section className='Content'>
 
-      
+      <PageTitle Title="Dashboard Overview" SubTitle="Welcome back, here's what's happening with your projects today."/>
 
 
     </section>
