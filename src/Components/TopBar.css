@@ -5,6 +5,8 @@
     align-items: center;
     align-self: stretch;
     padding: 16px 24px;
+    border: 1px solid rgba(159, 45, 0, 0.50);
+    
 }
 
 .TopBar-Content{
@@ -18,6 +20,14 @@
 .Icon{
     width: 180%;
     height: 180%;
+    transition: all 0.3s ease;
+}
+
+.Icon:hover{
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid #7e600ce7;
+    border-radius: 50%;
 }
 
 .IconHolder{
