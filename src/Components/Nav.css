@@ -1,12 +1,13 @@
 nav{
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-start;
     height: 100vh;
     padding: 24px;
     float: left;
     border: 1px solid #7e600ce7;
+    position: fixed;
 }
 
 ul{
@@ -16,4 +17,24 @@ ul{
 
 Link{
     text-decoration: none;
+}
+
+.Logout{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.UserDiv{
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    font-family: Panchang;
+    color: #FFF;
+    font-size: 14px;
+    padding: 24px;
 }

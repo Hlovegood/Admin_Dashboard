@@ -6,6 +6,18 @@
     gap: 16px;
     font-family: Panchang;
     color: #FFB574;
+    transition: background-color 0.5s ease-in-out, border 0.3s ease,  color 0.3s ease;
+    width: 100%;
+    padding: 8px 16px;
+}
+
+.NavLink:hover{
+    border: 1px solid #FFB574;
+    border-radius: 16px;
+    padding: 8px 16px;
+    background-color: rgba(126, 42, 12, 0.30);
+    color: #FFF;
+    width: 100%;
 }
 
 p{
