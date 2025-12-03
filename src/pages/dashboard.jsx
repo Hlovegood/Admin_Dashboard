@@ -1,28 +1,83 @@
-import React from 'react';
-import './dashboard.css'
-import Nav from '../Components/Nav';
-import { Helmet } from 'react-helmet';
-import TopBar from '../Components/TopBar';
-import PageTitle from '../common/PageTitle';
-
+import React from "react";
+import "./dashboard.css";
+import Nav from "../Components/Nav";
+import { Helmet } from "react-helmet";
+import TopBar from "../Components/TopBar";
+import PageTitle from "../common/PageTitle";
+import StatsContainer from "../Components/StatsContainer";
+import UsersIcon from "../assets/Icons/Users Icon.svg";
+import GainIcon from "../assets/Icons/Gain Icon.svg";
+import ProjectsIcon from '../assets/Icons/Projects Icon.svg';
+import MoneyIcon from '../assets/Icons/Money Icon.svg';
+import PulseIcon from '../assets/Icons/Pulse Icon.svg';
+import LossIcon from '../assets/Icons/Loss Icon.svg';
 const dashboard = () => {
-    return ( <>
-          <Helmet>
+  return (
+    <>
+      <Helmet>
         <title>Dashboard-HeshamAbozaid-490469420</title>
-        <meta
-          name="description"
-          content="This is the dashboard Page"
-        />
+        <meta name="description" content="This is the dashboard Page" />
         <meta property="og:title" content="Login" />
       </Helmet>
-    <Nav/>
-    <div className='DashboardContainer'>
-      <TopBar/>
-      <section className='Content'>
-        <PageTitle Title="Dashboard Overview" SubTitle="Welcome back, here's what's happening with your projects today."/>
-      </section>
-    </div>
-    </> );
-}
- 
+      <Nav />
+      <div className="DashboardContainer">
+        <TopBar />
+        <section className="Content">
+          <PageTitle
+            Title="Dashboard Overview"
+            SubTitle="Welcome back, here's what's happening with your projects today."
+          />
+
+          <section className="StatsContainers">
+          <article className="Stats">
+            <StatsContainer
+              StatIcon={UsersIcon}
+              StatGainIcon={GainIcon}
+              StatGain="+12.5%"
+              StatTitle="Total Users"
+              StatNumber="12,458"
+            />
+            
+          </article>
+
+                    <article className="Stats">
+            <StatsContainer
+              StatIcon={ProjectsIcon}
+              StatGainIcon={GainIcon}
+              StatGain="+8.2%"
+              StatTitle="Active Projects"
+              StatNumber="20"
+            />
+            
+          </article>
+
+                    <article className="Stats">
+            <StatsContainer
+              StatIcon={MoneyIcon}
+              StatGainIcon={GainIcon}
+              StatGain="+23.1%"
+              StatTitle="Revenue"
+              StatNumber="$54,239"
+            />
+            
+          </article>
+
+                    <article className="Stats">
+            <StatsContainer
+              StatIcon={PulseIcon}
+              StatGainIcon={LossIcon}
+              StatGain="-4.3%"
+              StatTitle="Server Load"
+              StatNumber="68%"
+            />
+            
+          </article>
+
+          </section>
+        </section>
+      </div>
+    </>
+  );
+};
+
 export default dashboard;
