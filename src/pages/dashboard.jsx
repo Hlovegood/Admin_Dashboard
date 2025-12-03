@@ -10,7 +10,6 @@ import GainIcon from "../assets/Icons/Gain Icon.svg";
 import ProjectsIcon from '../assets/Icons/Projects Icon.svg';
 import MoneyIcon from '../assets/Icons/Money Icon.svg';
 import PulseIcon from '../assets/Icons/Pulse Icon.svg';
-import LossIcon from '../assets/Icons/Loss Icon.svg';
 const dashboard = () => {
   return (
     <>
@@ -65,8 +64,8 @@ const dashboard = () => {
                     <article className="Stats">
             <StatsContainer
               StatIcon={PulseIcon}
-              StatGainIcon={LossIcon}
-              StatGain="-4.3%"
+              StatGainIcon={GainIcon}
+              StatGain="+4.3%"
               StatTitle="Server Load"
               StatNumber="68%"
             />
@@ -74,6 +73,10 @@ const dashboard = () => {
           </article>
 
           </section>
+
+
+
+          
         </section>
       </div>
     </>

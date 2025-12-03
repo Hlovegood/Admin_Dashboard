@@ -9,7 +9,7 @@ const StatsContainer = (props) => {
                 </div>
 
                 <div className='StatGain'>
-                    <img src={props.StatGainIcon} alt="" />
+                    <img src={props.StatGainIcon}  alt="" />
 
 
                     <h4>
