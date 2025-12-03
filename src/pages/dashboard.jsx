@@ -10,6 +10,9 @@ import GainIcon from "../assets/Icons/Gain Icon.svg";
 import ProjectsIcon from '../assets/Icons/Projects Icon.svg';
 import MoneyIcon from '../assets/Icons/Money Icon.svg';
 import PulseIcon from '../assets/Icons/Pulse Icon.svg';
+import AnalyticsIcon from '../assets/Icons/Analytics Icon.svg';
+import SectionTitle from './../common/SectionTitle';
+import Graph from "../Components/Graph";
 const dashboard = () => {
   return (
     <>
@@ -74,7 +77,19 @@ const dashboard = () => {
 
           </section>
 
+          <section className="GraphContainer">
 
+            <article className="GraphHead">
+
+            <div className="GraphIcon">
+            <img src={AnalyticsIcon} alt="Analytics Icon" />
+            </div>
+          <SectionTitle SecTitle ="Analytics Overview" SecSubTitle = "Monthly performance metrics"/>
+            </article>
+
+            <Graph/>
+
+          </section>
 
           
         </section>

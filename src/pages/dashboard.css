@@ -37,6 +37,37 @@ flex-shrink: 0;
 align-self: stretch;
 }
 
+.GraphContainer{
+    display: flex;
+height: 425px;
+padding: 25px ;
+flex-direction: column;
+align-items: flex-start;
+gap: 24px;
+align-self: stretch;
+border-radius: 24px;
+border: 1px solid #FFB574;
+background: rgba(126, 42, 12, 0.30);
+}
+
+.GraphHead{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+
+.GraphIcon{display: flex;
+width: 40px;
+height: 40px;
+justify-content: center;
+align-items: center;
+flex-shrink: 0;
+    border-radius: 12px;
+background: rgba(159, 45, 0, 0.50);
+}
 @media (max-width: 768px) {
     .DashboardContainer{
         margin-left: 0;
