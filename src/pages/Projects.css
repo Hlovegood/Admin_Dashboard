@@ -1,0 +1,16 @@
+.DashboardContainer{
+    margin-left: 280px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.Content{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    margin: 0;
+    flex: 1;
+}

@@ -15,7 +15,9 @@ import ClockIcon from "../assets/Icons/Clock Icon.svg";
 import SectionTitle from "./../common/SectionTitle";
 import Graph from "../Components/Graph";
 import RecentContent from "../common/RecentContent";
-import RecentProjects from "../Components/RecentProjects"
+import RecentProjects from "../Components/RecentProjects";
+
+
 const dashboard = () => {
   return (
     <>

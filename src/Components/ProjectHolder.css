@@ -1,0 +1,57 @@
+.Buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.Mockup{
+border-radius: 20px;
+}
+
+.ProjectData{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.Container{
+display: flex;
+padding: 24px 16px;
+flex-direction: column;
+justify-content: center;
+align-items: fle;
+
+gap: 16px;
+border-radius: 16px;
+border: 1.63px solid #FFB574;
+background: rgba(0, 0, 0, 0.00);
+
+}
+
+button{
+    border-radius: 3.26px;
+border: 0.815px solid #C17A4A;
+background: #9A5A3C;
+display: flex;
+height: 21.19px;
+padding: 3.26px 6.52px;
+justify-content: center;
+align-items: center;
+font-family: Panchang;
+color: white;
+}
+
+.Title{
+    color:white;
+    font-family: Panchang;
+    width: fit-content;
+}
+
+.Year{
+    color:#B87C5C;
+    font-family: Arial;
+    width: fit-content;
+}
