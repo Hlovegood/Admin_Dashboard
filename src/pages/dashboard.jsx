@@ -8,22 +8,20 @@ import PageTitle from '../common/PageTitle';
 const dashboard = () => {
     return ( <>
           <Helmet>
-        <title>Login-HeshamAbozaid-490469420</title>
+        <title>Dashboard-HeshamAbozaid-490469420</title>
         <meta
           name="description"
-          content="This is the Login Page for the admin dashboard"
+          content="This is the dashboard Page"
         />
         <meta property="og:title" content="Login" />
       </Helmet>
     <Nav/>
-    
+    <div className='DashboardContainer'>
       <TopBar/>
-    <section className='Content'>
-
-      <PageTitle Title="Dashboard Overview" SubTitle="Welcome back, here's what's happening with your projects today."/>
-
-
-    </section>
+      <section className='Content'>
+        <PageTitle Title="Dashboard Overview" SubTitle="Welcome back, here's what's happening with your projects today."/>
+      </section>
+    </div>
     </> );
 }
  

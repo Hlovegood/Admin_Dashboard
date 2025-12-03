@@ -4,10 +4,16 @@ nav{
     justify-content: space-around;
     align-items: flex-start;
     height: 100vh;
+    width: 280px;
     padding: 24px;
-    float: left;
     border: 1px solid #7e600ce7;
-    position: relative;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 ul{
@@ -16,8 +22,9 @@ ul{
     justify-content: flex-start;
     align-items: flex-start;
     list-style: none;
-    padding: 24px;
+    padding: 0;
     margin: 0;
+    width: 100%;
 }
 
 Link{
