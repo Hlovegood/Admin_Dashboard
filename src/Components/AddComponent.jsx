@@ -3,7 +3,7 @@ import Plus from "../assets/Icons/Plus Icon.svg";
 import "./AddComponent.css";
 import { Link } from 'react-router-dom';
 
-const AddComponent = () => {
+const AddComponent = (props) => {
   return (
     <>
       <Link className="Container1">
@@ -14,7 +14,7 @@ const AddComponent = () => {
 
           <article>
             <div className="ProjectData1">
-              <h3 className="Title1">New Project</h3>
+              <h3 className="Title1">{props.Function}</h3>
             </div>
           </article>
         </section>
