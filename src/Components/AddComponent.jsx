@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const AddComponent = (props) => {
   return (
     <>
-      <Link className="Container1">
+      <Link className="Container1" to = {props.Page}>
         <section >
           <div className="PlusSignCont">
             <img src={Plus} alt="" className="PlusSign" />

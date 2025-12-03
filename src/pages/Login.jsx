@@ -5,6 +5,11 @@ import User from "../assets/Icons/User Icon.png";
 import { Link, useNavigate} from "react-router-dom";
 import DotGrid from "../Components/DotGrid";
 const Login = () => {
+  
+  <meta name="robots" content="noindex, nofollow"></meta>
+
+
+
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

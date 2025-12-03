@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/dashboard';
 import ScrollToTop from './Components/ScrollToTop';
 import Projects from './pages/Projects';
+import ProjectEditor from './pages/ProjectEditor';
 const Routing = () => {
     return ( <>
     <BrowserRouter>
@@ -13,6 +14,8 @@ const Routing = () => {
         <Route path="/" element={<Login />} />
         <Route path ="/dashboard" element ={<Dashboard />}/>
         <Route path ="/projects" element ={<Projects />}/>
+        <Route path ="/project-editor" element ={<ProjectEditor />}/>
+
 
 
 

@@ -79,7 +79,7 @@ const Projects = () => {
               Year="2024"
             />
 
-            <AddComponent Function="New Project"/>
+            <AddComponent Function="New Project" Page = "/project-editor"/>
           </section>
         </section>
       </div>
