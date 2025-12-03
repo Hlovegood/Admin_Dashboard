@@ -11,6 +11,7 @@ import ProjectsIcon from '../assets/Icons/Projects Icon.svg';
 import MoneyIcon from '../assets/Icons/Money Icon.svg';
 import PulseIcon from '../assets/Icons/Pulse Icon.svg';
 import AnalyticsIcon from '../assets/Icons/Analytics Icon.svg';
+import ClockIcon from '../assets/Icons/Clock Icon.svg';
 import SectionTitle from './../common/SectionTitle';
 import Graph from "../Components/Graph";
 const dashboard = () => {
@@ -88,6 +89,19 @@ const dashboard = () => {
             </article>
 
             <Graph/>
+
+          </section>
+
+          <section className="RecentContainer">
+              <article className="GraphHead">
+                <div className="GraphIcon">
+                  <img src={ClockIcon} alt="" />
+                </div>
+
+            <SectionTitle SecTitle ="Recent Activities" SecSubTitle = "Latest updates and activities"/>
+              </article>
+
+
 
           </section>
 
