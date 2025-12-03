@@ -1,4 +1,4 @@
-/* ProjectTable.css */
+
 
 .table-container {
   width: 100%;
@@ -151,7 +151,6 @@
   }
 }
 
-/* Smooth scrolling for touch devices */
 @media (hover: none) {
   .table-wrapper {
     -webkit-overflow-scrolling: touch;

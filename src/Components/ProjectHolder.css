@@ -21,14 +21,13 @@ border-radius: 20px;
 display: flex;
 padding: 24px 16px;
 flex-direction: column;
-justify-content: center;
-align-items: fle;
-
+justify-content: flex-start;
 gap: 16px;
 border-radius: 16px;
 border: 1.63px solid #FFB574;
 background: rgba(0, 0, 0, 0.00);
-
+width: 20%;
+height: 40vh;
 }
 
 button{
@@ -42,6 +41,12 @@ justify-content: center;
 align-items: center;
 font-family: Panchang;
 color: white;
+transition: all 0.3s ease;
+}
+
+button:hover{
+background: #44170281;
+cursor: pointer;
 }
 
 .Title{
