@@ -1,0 +1,159 @@
+/* ProjectTable.css */
+
+.table-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.table-wrapper:active {
+  cursor: grabbing;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.project-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+.project-table thead {
+  background: transparent;
+}
+
+.project-table th {
+  text-align: left;
+  padding: 16px 20px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #FFA500;
+  border-bottom: 2px solid #ffaa2ba4;
+  white-space: nowrap;
+}
+
+.project-table tbody tr {
+  border-bottom: 1px solid #ffaa2ba4;
+  transition: background-color 0.2s ease;
+}
+
+.project-table tbody tr:hover {
+  background-color: #f59f1d57;
+}
+
+.project-table td {
+  padding: 20px;
+  font-size: 14px;
+  color: #FFD9A3;
+  white-space: nowrap;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-badge.in-progress {
+
+  color: #FFA500;
+}
+
+.status-badge.review {
+
+  color: #90EE90;
+}
+
+.status-badge.pending {
+
+  color: #D2691E;
+}
+
+.progress-bar {
+  width: 120px;
+  height: 8px;
+
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.icon-team,
+.icon-calendar {
+  font-size: 18px;
+  display: inline-block;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .project-table {
+    min-width: 700px;
+  }
+  
+  .project-table th,
+  .project-table td {
+    padding: 14px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-wrapper {
+    touch-action: pan-x;
+  }
+  
+  .project-table {
+    min-width: 600px;
+  }
+  
+  .project-table th,
+  .project-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  
+  .progress-bar {
+    width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-table th,
+  .project-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  
+  .status-badge {
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+  
+  .progress-bar {
+    width: 80px;
+    height: 6px;
+  }
+}
+
+/* Smooth scrolling for touch devices */
+@media (hover: none) {
+  .table-wrapper {
+    -webkit-overflow-scrolling: touch;
+  }
+}
