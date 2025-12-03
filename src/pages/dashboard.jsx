@@ -14,6 +14,7 @@ import AnalyticsIcon from '../assets/Icons/Analytics Icon.svg';
 import ClockIcon from '../assets/Icons/Clock Icon.svg';
 import SectionTitle from './../common/SectionTitle';
 import Graph from "../Components/Graph";
+import RecentContent from "../common/RecentContent";
 const dashboard = () => {
   return (
     <>
@@ -100,6 +101,26 @@ const dashboard = () => {
 
             <SectionTitle SecTitle ="Recent Activities" SecSubTitle = "Latest updates and activities"/>
               </article>
+
+
+            <RecentContent Letters = "HA" Name = "Hesham Abozaid" Activity = "Edited Project Alpha" AppName = "Project Management App" Time = "2 hours ago"/>
+
+            <RecentContent Letters = "MC" Name = "Mark Chen" Activity = "Edited Project Alpha" AppName = "Project Management App" Time = "2 hours ago"/>
+
+
+            <RecentContent Letters = "ED" Name = "Emma Davis" Activity = "Edited Project Alpha" AppName = "Project Management App" Time = "2 hours ago"/>
+
+
+            <RecentContent Letters = "JW" Name = "James Wilson" Activity = "Edited Project Alpha" AppName = "Project Management App" Time = "2 hours ago"/>
+
+
+            <RecentContent Letters = "LA" Name = "James Wilson" Activity = "Edited Project Alpha" AppName = "Project Management App" Time = "2 hours ago"/>
+
+
+            <RecentContent Letters = "LJ" Name = "Lebron James" Activity = "Edited Project Alpha" AppName = "Project Management App" Time = "2 hours ago"/>
+
+
+            <RecentContent Letters = "JS" Name = "Java Script" Activity = "Edited Project Alpha" AppName = "Project Management App" Time = "2 hours ago"/>
 
 
 

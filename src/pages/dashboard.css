@@ -72,8 +72,8 @@ background: rgba(159, 45, 0, 0.50);
 
 .RecentContainer{
     display: flex;
-height: 446px;
-padding: 25px 25px 1px 25px;
+height: 100%;
+padding: 25px;
 flex-direction: column;
 align-items: flex-start;
 gap: 24px;
