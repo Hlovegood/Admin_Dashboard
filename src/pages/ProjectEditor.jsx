@@ -4,7 +4,7 @@ import './ProjectEditor.css';
 import Nav from '../Components/Nav'
 import TopBar from '../Components/TopBar';
 import PageTitle from '../common/PageTitle';
-import ImageUpload from '../Components/ImageUpload'
+import ProjectForm from '../Components/ImageUploadNew'
 const ProjectEditor = () => {
     return ( <>
               <Helmet>
@@ -22,7 +22,7 @@ const ProjectEditor = () => {
 
 
         <section className='Holder'>
-          <ImageUpload/>
+          <ProjectForm/>
 
         </section>
         </section>

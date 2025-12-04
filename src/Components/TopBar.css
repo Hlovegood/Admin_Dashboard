@@ -41,7 +41,16 @@
     gap: 8px;
 }
 
+.LogoutLink{
+    text-decoration: none;
+    display: none;
+}
+
 @media (max-width: 768px) {
+    .LogoutLink{
+        display: flex;
+    }
+    
     .TopBar{
         padding: 12px 16px;
         margin-bottom: 65px;

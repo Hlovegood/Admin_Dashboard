@@ -161,7 +161,7 @@ const dashboard = () => {
           </section>
 
 
-          <section className="RecentContainer">
+          <section className="RecentContainer1">
 
             <SectionTitle SecTitle ="Recent Projects" SecSubTitle="Active and ongoing wrok"/>
 

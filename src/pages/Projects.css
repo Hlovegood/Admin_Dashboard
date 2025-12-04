@@ -15,12 +15,17 @@
 }
 
 .Projects{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
+    width: 100%;
+}
+
+@media (max-width: 1440px) {
+    .Projects{
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
 }
 
 @media (max-width: 1024px) {
@@ -29,6 +34,7 @@
     }
     
     .Projects{
+        grid-template-columns: repeat(2, 1fr);
         gap: 16px;
     }
 }
@@ -45,6 +51,7 @@
     }
     
     .Projects{
+        grid-template-columns: repeat(2, 1fr);
         gap: 12px;
     }
 }
@@ -56,6 +63,7 @@
     }
     
     .Projects{
+        grid-template-columns: 1fr;
         gap: 10px;
     }
 }

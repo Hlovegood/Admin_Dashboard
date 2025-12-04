@@ -36,13 +36,6 @@ const Nav = () => {
 
             <li>
                 <Link>
-                <NavLink Icon={UsersIcon} Text={"Users"}/>
-                </Link>
-            </li>
-
-
-            <li>
-                <Link>
                 <NavLink Icon={ProfileIcon} Text={"Profile"}/>
                 </Link>
             </li>

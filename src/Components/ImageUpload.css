@@ -6,6 +6,58 @@
   margin: 0 auto;
   padding: 40px 20px;
   font-family: Arial, sans-serif;
+  transition: direction 0.3s ease;
+}
+
+.rtl-container {
+  direction: rtl;
+}
+
+/* Language Switcher */
+.language-switcher {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 30px;
+  background: rgba(255, 181, 116, 0.1);
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 181, 116, 0.3);
+  width: fit-content;
+  margin-left: auto;
+}
+
+.language-switcher.rtl {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  color: #FFB574;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: all 0.3s ease;
+  font-family: Panchang, Arial;
+}
+
+.lang-btn:hover {
+  color: #FFA500;
+}
+
+.lang-btn.active {
+  color: white;
+  background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+  border-radius: 8px;
+}
+
+.lang-divider {
+  color: rgba(255, 181, 116, 0.5);
+  margin: 0 8px;
 }
 
 .form-grid {
@@ -80,7 +132,200 @@
   width: 100%;
   padding: 14px 16px;
   background: rgba(126, 42, 12, 0.20);
-  border:  1px solid rgba(159, 45, 0, 0.50);
+  border: 1px solid rgba(159, 45, 0, 0.50);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #8B7355;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.text-input::placeholder,
+.multi-select-input::placeholder,
+.tag-input-field::placeholder {
+  color: #C4A89A;
+}
+
+.text-input:focus {
+  border-color: #FFA500;
+  background: #F5E5D5;
+}
+
+/* Textarea */
+.textarea-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #C4A89A;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #8B7355;
+  outline: none;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.textarea-input::placeholder {
+  color: #C4A89A;
+}
+
+.textarea-input:focus {
+  border-color: #FFA500;
+  background: #F5E5D5;
+}
+
+/* Form Buttons */
+.form-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.btn-submit,
+.btn-cancel {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: Panchang, Arial;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+  color: white;
+}
+
+.btn-submit:hover {
+  background: linear-gradient(135deg, #FF8C00 0%, #FF7700 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+}
+
+.btn-cancel {
+  background: linear-gradient(135deg, #E8D4C4 0%, #D9C4B4 100%);
+  color: #8B7355;
+}
+
+.btn-cancel:hover {
+  background: linear-gradient(135deg, #D9C4B4 0%, #CAB5A5 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-form-container {
+    padding: 20px 15px;
+  }
+  
+  .language-switcher {
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-submit,
+  .btn-cancel {
+    width: 100%;
+  }
+  
+  .text-input,
+  .textarea-input {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-form-container {
+    padding: 15px 10px;
+  }
+  
+  .form-buttons {
+    gap: 10px;
+  }
+}
+
+.form-column-left,
+.form-column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  font-size: 14px;
+  color: #FFA500;
+  font-weight: 500;
+}
+
+.required {
+  color: #FF6B6B;
+}
+
+/* Image Upload */
+.image-upload-box {
+  width: 100%;
+  height: 200px;
+  border: 2px dashed #C4A89A;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.image-upload-box:hover {
+  background: linear-gradient(135deg, #D9C4B4 0%, #CAB5A5 100%);
+  border-color: #B5988A;
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.upload-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.upload-text {
+  color: #B5988A;
+  font-size: 14px;
+}
+
+/* Text Inputs */
+.text-input,
+.multi-select-input,
+.tag-input-field {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(126, 42, 12, 0.20);
+  border: 1px solid rgba(159, 45, 0, 0.50);
   border-radius: 8px;
   font-size: 14px;
   color: #8B7355;

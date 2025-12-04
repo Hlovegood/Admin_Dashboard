@@ -29,6 +29,12 @@
     .NavLink{
         gap: 12px;
         padding: 6px 12px;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .NavLink p{
+        display: none;
     }
     
     .NavLink:hover{
@@ -41,6 +47,12 @@
         gap: 8px;
         padding: 4px 8px;
         font-size: 12px;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .NavLink p{
+        display: none;
     }
     
     .NavLink:hover{

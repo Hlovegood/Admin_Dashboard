@@ -69,6 +69,10 @@ Link{
         overflow-y: hidden;
         overflow-x: auto;
         box-sizing: border-box;
+        background: rgba(101, 35, 0, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255, 181, 116, 0.3);
     }
     
     ul{
@@ -84,6 +88,10 @@ Link{
     }
     
     .UserDiv{
+        display: none;
+    }
+    
+    .Logout{
         display: none;
     }
 }
