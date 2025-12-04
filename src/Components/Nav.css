@@ -50,3 +50,40 @@ Link{
     font-size: 14px;
     padding: 24px;
 }
+
+@media (max-width: 768px) {
+    nav{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        height: auto;
+        width: 100%;
+        padding: 16px 24px;
+        border: 1px solid #7e600ce7;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        top: auto;
+        z-index: 1000;
+        overflow-y: hidden;
+        overflow-x: auto;
+        box-sizing: border-box;
+    }
+    
+    ul{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        gap: 16px;
+    }
+    
+    .UserDiv{
+        display: none;
+    }
+}

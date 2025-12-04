@@ -16,38 +16,39 @@
 
 .Stats{
     display: flex;
-padding: 16px 24px;
-flex-direction: column;
-justify-content: center;
-align-items: flex-start;
-gap: 16px;
-flex: 1 0 0;
-align-self: stretch;
-border-radius: 24px;
-border: 1px solid #FFB574;
-background: rgba(126, 42, 12, 0.30);
+    padding: 16px 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 24px;
+    border: 1px solid #FFB574;
+    background: rgba(126, 42, 12, 0.30);
 }
 
 .StatsContainers{
-display: flex;
-padding: 10px 16px;
-align-items: flex-start;
-gap: 28px;
-flex-shrink: 0;
-align-self: stretch;
+    display: flex;
+    padding: 10px 16px;
+    align-items: flex-start;
+    gap: 28px;
+    flex-shrink: 0;
+    align-self: stretch;
+    flex-wrap: wrap;
 }
 
 .GraphContainer{
     display: flex;
-height: 425px;
-padding: 25px ;
-flex-direction: column;
-align-items: flex-start;
-gap: 24px;
-align-self: stretch;
-border-radius: 24px;
-border: 1px solid #FFB574;
-background: rgba(126, 42, 12, 0.30);
+    height: 425px;
+    padding: 25px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    align-self: stretch;
+    border-radius: 24px;
+    border: 1px solid #FFB574;
+    background: rgba(126, 42, 12, 0.30);
 }
 
 .GraphHead{
@@ -58,35 +59,96 @@ background: rgba(126, 42, 12, 0.30);
     margin-bottom: 24px;
 }
 
-
-.GraphIcon{display: flex;
-width: 40px;
-height: 40px;
-justify-content: center;
-align-items: center;
-flex-shrink: 0;
+.GraphIcon{
+    display: flex;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
     border-radius: 12px;
-background: rgba(159, 45, 0, 0.50);
+    background: rgba(159, 45, 0, 0.50);
 }
-
 
 .RecentContainer{
     display: flex;
-height: 100%;
-padding: 25px;
-flex-direction: column;
-align-items: flex-start;
-gap: 24px;
-align-self: stretch;
-border-radius: 24px;
-border: 1px solid #FFB574;
-background: rgba(126, 42, 12, 0.30);
+    height: 100%;
+    padding: 25px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    align-self: stretch;
+    border-radius: 24px;
+    border: 1px solid #FFB574;
+    background: rgba(126, 42, 12, 0.30);
 }
 
-
+@media (max-width: 1024px) {
+    .DashboardContainer{
+        margin-left: 280px;
+    }
+    
+    .StatsContainers{
+        gap: 16px;
+    }
+    
+    .GraphContainer{
+        height: 350px;
+    }
+}
 
 @media (max-width: 768px) {
     .DashboardContainer{
         margin-left: 0;
+        margin-bottom: 70px;
+    }
+    
+    .Content{
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    .Stats{
+        padding: 12px 16px;
+    }
+    
+    .StatsContainers{
+        padding: 8px 12px;
+        gap: 12px;
+    }
+    
+    .GraphContainer{
+        height: 300px;
+        padding: 16px;
+    }
+    
+    .RecentContainer{
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Content{
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .Stats{
+        padding: 10px 12px;
+    }
+    
+    .StatsContainers{
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .GraphContainer{
+        height: 250px;
+        padding: 12px;
+    }
+    
+    .RecentContainer{
+        height: auto;
+        padding: 12px;
     }
 }

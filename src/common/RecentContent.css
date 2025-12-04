@@ -1,14 +1,14 @@
 .LettersHolder{
     display: flex;
-width: 32px;
-height: 32px;
-justify-content: center;
-align-items: center;
-border-radius: 800px;
-background: rgba(159, 45, 0, 0.50);
-color: #FFF;
-font-family: Arial;
-font-size: 12px;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 800px;
+    background: rgba(159, 45, 0, 0.50);
+    color: #FFF;
+    font-family: Arial;
+    font-size: 12px;
 }
 
 .ContentRecent{
@@ -28,7 +28,6 @@ font-size: 12px;
     justify-content: flex-start;
     align-items: flex-start;
     font-family: Arial;
-    
 }
 
 .RecentContent p, h5, h6 {
@@ -43,7 +42,6 @@ font-size: 12px;
 .RecentActivity{
     color: #FFD6A7;
     font-size: 14px;
-    
 }
 
 .RecentApp{

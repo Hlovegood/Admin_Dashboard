@@ -2,10 +2,32 @@
     font-family: Panchang;
     color: white;
     margin: 0;
+    font-size: clamp(24px, 5vw, 32px);
 }
 
 .SubTitle{
     font-family: Panchang;
     color: #FFD6A7;
     margin: 0;
+    font-size: clamp(14px, 3vw, 16px);
+}
+
+@media (max-width: 768px) {
+    .Title{
+        font-size: 20px;
+    }
+    
+    .SubTitle{
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Title{
+        font-size: 18px;
+    }
+    
+    .SubTitle{
+        font-size: 12px;
+    }
 }

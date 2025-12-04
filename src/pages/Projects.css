@@ -5,7 +5,6 @@
     flex-direction: column;
 }
 
-
 .Content{
     display: flex;
     flex-direction: column;
@@ -20,6 +19,43 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     gap: 24px;
+}
+
+@media (max-width: 1024px) {
+    .DashboardContainer{
+        margin-left: 280px;
+    }
+    
+    .Projects{
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .DashboardContainer{
+        margin-left: 0;
+        margin-bottom: 70px;
+    }
+    
+    .Content{
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    .Projects{
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Content{
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .Projects{
+        gap: 10px;
+    }
 }

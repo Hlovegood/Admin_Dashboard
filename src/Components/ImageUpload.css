@@ -41,7 +41,6 @@
 .image-upload-box {
   width: 100%;
   height: 200px;
-  background: linear-gradient(135deg, #E8D4C4 0%, #D9C4B4 100%);
   border: 2px dashed #C4A89A;
   border-radius: 12px;
   display: flex;
@@ -119,7 +118,6 @@
 .textarea-input {
   width: 100%;
   padding: 14px 16px;
-  background: linear-gradient(135deg, #E8D4C4 0%, #D9C4B4 100%);
   border: 1px solid #C4A89A;
   border-radius: 8px;
   font-size: 14px;
@@ -128,6 +126,7 @@
   resize: vertical;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
 .textarea-input::placeholder {
@@ -136,7 +135,7 @@
 
 .textarea-input:focus {
   border-color: #FFA500;
-  background: #F5E5D5;
+  background: #301801;
 }
 
 /* Multi-select / Programming Languages */
@@ -145,8 +144,7 @@
   flex-wrap: wrap;
   gap: 8px;
   padding: 12px;
-  background: linear-gradient(135deg, #E8D4C4 0%, #D9C4B4 100%);
-  border: 1px solid #C4A89A;
+  border: 1px solid rgba(159, 45, 0, 0.50);
   border-radius: 8px;
   min-height: 48px;
 }
@@ -185,6 +183,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 .tag-button {
@@ -242,7 +242,6 @@
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #E8D4C4 0%, #D9C4B4 100%);
   border: 2px dashed #C4A89A;
   color: #C4A89A;
   font-size: 24px;
@@ -260,7 +259,6 @@
   display: flex;
   gap: 20px;
   padding: 16px;
-  background: linear-gradient(135deg, #E8D4C4 0%, #D9C4B4 100%);
   border-radius: 8px;
 }
 

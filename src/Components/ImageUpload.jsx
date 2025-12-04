@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ImageUpload.css';
 
-// Image Upload Component
+// Image Upload Componentmake
 const ImageUploadField = ({ value, onChange }) => {
   const [preview, setPreview] = useState(value || null);
   const fileInputRef = React.useRef(null);
