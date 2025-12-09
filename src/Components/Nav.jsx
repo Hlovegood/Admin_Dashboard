@@ -7,6 +7,7 @@ import ProjectsIcon from '../assets/Icons/Projects Icon.svg';
 import UsersIcon from '../assets/Icons/Users Icon.svg';
 import ProfileIcon from '../assets/Icons/Profile Icon.svg';
 import LogoutIcon from '../assets/Icons/Logout Icon.svg';
+import PaperIcon from '../assets/Icons/Paper Icon.svg'
 const Nav = () => {
     return ( <>
     <nav>
@@ -37,6 +38,12 @@ const Nav = () => {
             <li>
                 <Link>
                 <NavLink Icon={ProfileIcon} Text={"Profile"}/>
+                </Link>
+            </li>
+
+                <li>
+                <Link to={"/pages"}>
+                <NavLink Icon={PaperIcon} Text={"Pages"}/>
                 </Link>
             </li>
         </ul>
