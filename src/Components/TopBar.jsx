@@ -9,9 +9,12 @@ const TopBar = () => {
     return ( <>
     <section className='TopBar'>
     <article className='TopBar-Content'>
+
+        <Link to="/mail">
         <div className='IconHolder'>
             <img src={BellIcon} alt="Notification Bell Icon" className='Icon' />
         </div>
+        </Link>
 
         <div className='IconHolder'>
             <img src={SettingsIcon} alt="Settings Icon"  className='Icon'/>

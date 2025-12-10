@@ -6,6 +6,8 @@ import ScrollToTop from './Components/ScrollToTop';
 import Projects from './pages/Projects';
 import ProjectEditor from './pages/ProjectEditor';
 import Pages from '../src/pages/Pages'
+import Profile from './pages/Profile';
+import Mail from './pages/Mail';
 const Routing = () => {
     return ( <>
     <BrowserRouter>
@@ -17,8 +19,8 @@ const Routing = () => {
         <Route path ="/projects" element ={<Projects />}/>
         <Route path ="/project-editor" element ={<ProjectEditor />}/>
         <Route path='/pages' element={<Pages/>}/>
-
-
+        <Route path= '/profile' element={<Profile/>}/>
+        <Route path='/mail' element={<Mail/>}/>
 
 
     </Routes>

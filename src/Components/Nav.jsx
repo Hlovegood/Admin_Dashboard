@@ -35,7 +35,7 @@ const Nav = () => {
             </li>
 
             <li>
-                <Link>
+                <Link to={'/profile'}>
                 <NavLink Icon={ProfileIcon} Text={"Profile"}/>
                 </Link>
             </li>
