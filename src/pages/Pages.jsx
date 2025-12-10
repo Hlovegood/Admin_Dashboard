@@ -12,8 +12,6 @@ import photo from '../assets/Pages Pics/Photo.png';
 import AR from '../assets/Pages Pics/AR.png';
 import Contact from '../assets/Pages Pics/Contact.png';
 import About from '../assets/Pages Pics/About.png';
-
-import AddComponent from "../Components/AddComponent";
 const Projects = () => {
   return (
     <>
@@ -65,8 +63,6 @@ const Projects = () => {
               Mockup={About}
               ProjectTitle="About Page"
             />
-
-            <AddComponent Function="New Page" Page = "/project-editor"/>
           </section>
         </section>
       </div>

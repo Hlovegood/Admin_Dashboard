@@ -3,9 +3,12 @@ import "./MailComp.css";
 import MailOpen from "../assets/Icons/New Mail Icon.svg";
 import Trash from "../assets/Icons/Trash Icon.svg";
 import Eye from "../assets/Icons/Eye Icon.svg";
+import MailPreviewModal from "./MailPreviewModal";
 
 const ContactMessages = () => {
   const [activeTab, setActiveTab] = useState("total");
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const messages = [
     {
@@ -148,7 +151,13 @@ const ContactMessages = () => {
               <div className="column-subject">{message.subject}</div>
               <div className="column-date">{message.date}</div>
               <div className="column-actions">
-                <button className="action-btn view-btn">
+                <button 
+                  className="action-btn view-btn"
+                  onClick={() => {
+                    setSelectedMessage(message);
+                    setIsModalOpen(true);
+                  }}
+                >
                   <img src={Eye} alt="" />
                 </button>
                 <button className="action-btn delete-btn">
@@ -159,6 +168,15 @@ const ContactMessages = () => {
           ))}
         </div>
       </div>
+
+      <MailPreviewModal 
+        message={selectedMessage} 
+        isOpen={isModalOpen} 
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedMessage(null);
+        }} 
+      />
     </div>
   );
 };
