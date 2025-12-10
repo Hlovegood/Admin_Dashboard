@@ -3,7 +3,6 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
@@ -19,7 +18,6 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background-color: #fff5ed;
   border: 1px solid #fed7aa;
   display: flex;
   align-items: center;
@@ -105,7 +103,7 @@
 }
 
 .message-row:hover {
-  background-color: #fff5ed;
+  background-color: #4b2303;
 }
 
 /* Columns */
@@ -117,6 +115,7 @@
 .column-actions {
   display: flex;
   align-items: center;
+  color: white;
 }
 
 .column-status {
@@ -174,7 +173,7 @@
 }
 
 .view-btn {
-  background-color: #fed7aa;
+  background-color: #522a04;
   color: #fb923c;
 }
 
@@ -183,7 +182,7 @@
   color: #ef4444;
 }
 
-/* Responsive Design */
+
 @media (max-width: 1200px) {
   .table-header,
   .message-row {
