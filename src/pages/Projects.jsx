@@ -1,20 +1,56 @@
-import React from "react";
+import React , { useEffect, useState } from "react";
+import { supabase } from '../supabase';
 import { Helmet } from "react-helmet";
 import "./Projects.css";
 import Nav from "../Components/Nav";
 import TopBar from "../Components/TopBar";
 import ProjectHolder from "../Components/ProjectHolder";
-import Edita from "../assets/Mockups/Edita Website.png";
-import TV from "../assets/Mockups/Nickelodeon Website.png";
-import Car from "../assets/Mockups/Car Parts Website.png";
-import Real from "../assets/Mockups/Real Estate Firm Website.png";
-import Clothing from "../assets/Mockups/Clothing Shop App.png";
-import Smoochy from "../assets/Mockups/E-Commerce Website.png";
-import Food from "../assets/Mockups/Food App.png";
-import Fire from "../assets/Mockups/Story Website.png";
-import Rabbit from "../assets/Mockups/Plushie Store App.png";
 import AddComponent from "../Components/AddComponent";
 const Projects = () => {
+
+
+
+    const [loading, setLoading] = useState(true);
+     const [Details, setDetails] = useState([
+       {
+Apps:"",
+Category: "",
+CoverImg: "",
+Dev: "",
+Images: "",
+Img_1: "",
+Img_2: "",
+Img_3: "",
+Impact: "",
+Learnings: "",
+Ovr: "",
+Prob: "",
+Proto: "",
+Research: "",
+Role: "",
+Sol: "",
+Time: "",
+Title: "",
+Year: "",
+created_at: "",
+id: ""
+        }
+     ])
+
+      useEffect(()=>{
+        
+        async function  callGetAPI(){
+          const Details = await supabase.from("Project Details").select("*");
+          setDetails(Details.data)
+          // console.log(Details.data[1]);
+          setLoading(false);
+          }
+  
+          callGetAPI();
+  
+      },[]);
+        if (loading) return <p>Loading...</p>;
+
   return (
     <>
       <Helmet>
@@ -29,55 +65,20 @@ const Projects = () => {
 
         <section className="Content">
           <section className="Projects">
-            <ProjectHolder
-              Mockup={Edita}
-              ProjectTitle="Egyptian Food Brand Website"
-              Year="2024"
+
+{
+  Details.map((Detail)=>{
+    return <ProjectHolder
+              Mockup={Detail.CoverImg}
+              ProjectTitle={Detail.Title}
+              Year={Detail.Year}
             />
 
-            <ProjectHolder
-              Mockup={TV}
-              ProjectTitle="TV Channel Website"
-              Year="2024"
-            />
-            <ProjectHolder
-              Mockup={Car}
-              ProjectTitle="Car Parts Website"
-              Year="2024"
-            />
-            <ProjectHolder
-              Mockup={Real}
-              ProjectTitle="Real Estate Firm Website"
-              Year="2024"
-            />
-            <ProjectHolder
-              Mockup={Clothing}
-              ProjectTitle="Clothing Shop App"
-              Year="2024"
-            />
-            <ProjectHolder
-              Mockup={Food}
-              ProjectTitle="What to Eat App"
-              Year="2024"
-            />
+  }
+  )
+}
 
-            <ProjectHolder
-              Mockup={Smoochy}
-              ProjectTitle="E-Commerce Website"
-              Year="2024"
-            />
-
-            <ProjectHolder
-              Mockup={Fire}
-              ProjectTitle="Fire Force Website"
-              Year="2024"
-            />
-
-            <ProjectHolder
-              Mockup={Rabbit}
-              ProjectTitle="Plushie Store App"
-              Year="2024"
-            />
+           
 
             <AddComponent Function="New Project" Page = "/project-editor"/>
           </section>

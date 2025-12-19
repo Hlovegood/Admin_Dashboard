@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import './ProfileEditor.css'
+import { supabase } from '../supabase';
+import './ProfileEditor.css';
+
 export default function ProfileForm() {
   const [introduction, setIntroduction] = useState('');
   const [socials, setSocials] = useState({
@@ -12,18 +14,57 @@ export default function ProfileForm() {
   const [altText, setAltText] = useState('');
   const [profileImage, setProfileImage] = useState(null);
   
-  const [skills, setSkills] = useState([
-    'Next.js', 'Javascript', 'UI Design', 'Typescript', 
-    'Social Media', 'Java Editor'
-  ]);
+  const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState('');
   
-  const [tools, setTools] = useState([
-    'Figma', 'Indesign', 'Photoshop', 'Illustrator',
-    'Sketch', 'Blender', 'After Effect', 'Framer',
-    'Corel Draw', 'Canva', 'React'
-  ]);
+  const [tools, setTools] = useState([]);
   const [newTool, setNewTool] = useState('');
+  
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch skills and tools from Supabase on component mount
+  useEffect(() => {
+    fetchSkillsAndTools();
+  }, []);
+
+  const fetchSkillsAndTools = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const { data, error: fetchError } = await supabase
+        .from('Skills')
+        .select('Skills, Apps')
+        .not('Apps', 'is', null); // Only get rows where Apps is not NULL
+
+      if (fetchError) throw fetchError;
+
+      if (data) {
+        // Extract unique skills (filter out NULL and duplicates)
+        const skillsData = [...new Set(
+          data
+            .map(item => item.Skills)
+            .filter(skill => skill !== null && skill !== '')
+        )];
+        
+        // Extract unique apps (filter out NULL and duplicates)
+        const toolsData = [...new Set(
+          data
+            .map(item => item.Apps)
+            .filter(app => app !== null && app !== '')
+        )];
+        
+        setSkills(skillsData);
+        setTools(toolsData);
+      }
+    } catch (err) {
+      console.error('Error fetching skills and tools:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -36,25 +77,65 @@ export default function ProfileForm() {
     }
   };
 
-  const removeSkill = (index) => {
+  const removeSkill = async (index) => {
+    const skillToRemove = skills[index];
     setSkills(skills.filter((_, i) => i !== index));
-  };
-
-  const addSkill = () => {
-    if (newSkill.trim()) {
-      setSkills([...skills, newSkill.trim()]);
-      setNewSkill('');
+    
+    // Optional: Delete from Supabase
+    try {
+      await supabase
+        .from('Skills')
+        .delete()
+        .eq('Skills', skillToRemove);
+    } catch (err) {
+      console.error('Error removing skill:', err);
     }
   };
 
-  const removeTool = (index) => {
-    setTools(tools.filter((_, i) => i !== index));
+  const addSkill = async () => {
+    if (newSkill.trim()) {
+      setSkills([...skills, newSkill.trim()]);
+      setNewSkill('');
+      
+      // Optional: Add to Supabase
+      try {
+        await supabase
+          .from('Skills')
+          .insert([{ Skills: newSkill.trim() }]);
+      } catch (err) {
+        console.error('Error adding skill:', err);
+      }
+    }
   };
 
-  const addTool = () => {
+  const removeTool = async (index) => {
+    const toolToRemove = tools[index];
+    setTools(tools.filter((_, i) => i !== index));
+    
+    // Optional: Delete from Supabase
+    try {
+      await supabase
+        .from('Skills')
+        .delete()
+        .eq('Apps', toolToRemove);
+    } catch (err) {
+      console.error('Error removing tool:', err);
+    }
+  };
+
+  const addTool = async () => {
     if (newTool.trim()) {
       setTools([...tools, newTool.trim()]);
       setNewTool('');
+      
+      // Optional: Add to Supabase
+      try {
+        await supabase
+          .from('Skills')
+          .insert([{ Apps: newTool.trim() }]);
+      } catch (err) {
+        console.error('Error adding tool:', err);
+      }
     }
   };
 
@@ -65,6 +146,27 @@ export default function ProfileForm() {
   const handleCancel = () => {
     console.log('Cancelling...');
   };
+
+  if (loading) {
+    return (
+      <div className="profile-form-container">
+        <div className="profile-form-wrapper">
+          <p>Loading skills and tools...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="profile-form-container">
+        <div className="profile-form-wrapper">
+          <p style={{ color: 'red' }}>Error: {error}</p>
+          <button onClick={fetchSkillsAndTools}>Retry</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
