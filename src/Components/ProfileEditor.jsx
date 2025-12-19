@@ -23,7 +23,7 @@ export default function ProfileForm() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch skills and tools from Supabase on component mount
+
   useEffect(() => {
     fetchSkillsAndTools();
   }, []);
@@ -36,19 +36,19 @@ export default function ProfileForm() {
       const { data, error: fetchError } = await supabase
         .from('Skills')
         .select('Skills, Apps')
-        .not('Apps', 'is', null); // Only get rows where Apps is not NULL
+        .not('Apps', 'is', null); 
 
       if (fetchError) throw fetchError;
 
       if (data) {
-        // Extract unique skills (filter out NULL and duplicates)
+        
         const skillsData = [...new Set(
           data
             .map(item => item.Skills)
             .filter(skill => skill !== null && skill !== '')
         )];
         
-        // Extract unique apps (filter out NULL and duplicates)
+       
         const toolsData = [...new Set(
           data
             .map(item => item.Apps)
@@ -81,7 +81,6 @@ export default function ProfileForm() {
     const skillToRemove = skills[index];
     setSkills(skills.filter((_, i) => i !== index));
     
-    // Optional: Delete from Supabase
     try {
       await supabase
         .from('Skills')
@@ -97,7 +96,7 @@ export default function ProfileForm() {
       setSkills([...skills, newSkill.trim()]);
       setNewSkill('');
       
-      // Optional: Add to Supabase
+      
       try {
         await supabase
           .from('Skills')
@@ -112,7 +111,7 @@ export default function ProfileForm() {
     const toolToRemove = tools[index];
     setTools(tools.filter((_, i) => i !== index));
     
-    // Optional: Delete from Supabase
+   
     try {
       await supabase
         .from('Skills')
@@ -128,7 +127,7 @@ export default function ProfileForm() {
       setTools([...tools, newTool.trim()]);
       setNewTool('');
       
-      // Optional: Add to Supabase
+      
       try {
         await supabase
           .from('Skills')
