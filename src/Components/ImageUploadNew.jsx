@@ -207,7 +207,7 @@ Brand: "",
       ...data,  
     };
 
-    const { data: result, error } = await supabase
+    const { data: error } = await supabase
       .from("Project Details")
       .insert([payload])
       .select();

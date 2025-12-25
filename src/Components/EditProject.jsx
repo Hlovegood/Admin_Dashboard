@@ -24,6 +24,7 @@ const translations = {
     customerSatisfaction: "Customer Satisfaction (%)",
     userEngagement: "User Engagement (%)",
     loadTime: "Page Load Time (ms)",
+    caseStudyImages: "Case Study Images (Max 3)",
     description: "Project Description",
     problem: "The Problem",
     solution: "The Solution",
@@ -53,6 +54,7 @@ const translations = {
     customerSatisfaction: "رضا العميل (%)",
     userEngagement: "تفاعل المستخدم (%)",
     loadTime: "وقت تحميل الصفحة (ms)",
+    caseStudyImages: "صور دراسة الحالة (حد أقصى 3)",
     description: "وصف المشروع",
     problem: "المشاكل التي واجهتها",
     solution: "الحل المقدم",
@@ -87,6 +89,7 @@ const ProjectForm = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
   const [preview, setPreview] = useState(null);
+  const [caseImagePreviews, setCaseImagePreviews] = useState(["", "", ""]);
 
   const t = translations[language];
 
@@ -115,6 +118,13 @@ const ProjectForm = () => {
           if (result[0].projectImage) {
             setPreview(result[0].projectImage);
           }
+          if (result[0].Case_Img_1 || result[0].Case_Img_2 || result[0].Case_Img_3) {
+            setCaseImagePreviews([
+              result[0].Case_Img_1 || "",
+              result[0].Case_Img_2 || "",
+              result[0].Case_Img_3 || ""
+            ]);
+          }
         } else {
           console.log("No data found for id:", id);
         }
@@ -138,6 +148,31 @@ const ProjectForm = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCaseImageChange = (e, index) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const newPreviews = [...caseImagePreviews];
+        newPreviews[index] = reader.result;
+        setCaseImagePreviews(newPreviews);
+        
+        const fieldName = `Case_Img_${index + 1}`;
+        setData({ ...data, [fieldName]: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeCaseImage = (index) => {
+    const newPreviews = [...caseImagePreviews];
+    newPreviews[index] = "";
+    setCaseImagePreviews(newPreviews);
+    
+    const fieldName = `Case_Img_${index + 1}`;
+    setData({ ...data, [fieldName]: "" });
   };
 
   const handleSubmit = async () => {
@@ -340,6 +375,145 @@ const ProjectForm = () => {
               <span className="input-suffix">ms</span>
             </div>
           </div>
+
+          {/* Subtitle */}
+          <div className="form-field">
+            <label className="field-label">Subtitle</label>
+            <input
+              type="text"
+              className="text-input"
+              value={data.Sub || ""}
+              onChange={(e) => setData({ ...data, Sub: e.target.value })}
+              placeholder="Enter subtitle"
+              dir={language === "ar" ? "rtl" : "ltr"}
+            />
+          </div>
+
+          {/* Research */}
+          <div className="form-field">
+            <label className="field-label">Research</label>
+            <input
+              type="text"
+              className="text-input"
+              value={data.Research || ""}
+              onChange={(e) => setData({ ...data, Research: e.target.value })}
+              placeholder="Enter research details"
+              dir={language === "ar" ? "rtl" : "ltr"}
+            />
+          </div>
+
+          {/* Prototype */}
+          <div className="form-field">
+            <label className="field-label">Prototype</label>
+            <input
+              type="text"
+              className="text-input"
+              value={data.Proto || ""}
+              onChange={(e) => setData({ ...data, Proto: e.target.value })}
+              placeholder="Enter prototype details"
+              dir={language === "ar" ? "rtl" : "ltr"}
+            />
+          </div>
+
+          {/* Developer */}
+          <div className="form-field">
+            <label className="field-label">Developer</label>
+            <input
+              type="text"
+              className="text-input"
+              value={data.Dev || ""}
+              onChange={(e) => setData({ ...data, Dev: e.target.value })}
+              placeholder="Enter developer name/details"
+              dir={language === "ar" ? "rtl" : "ltr"}
+            />
+          </div>
+
+          {/* Visual */}
+          <div className="form-field">
+            <label className="field-label">Visual</label>
+            <input
+              type="text"
+              className="text-input"
+              value={data.Vis || ""}
+              onChange={(e) => setData({ ...data, Vis: e.target.value })}
+              placeholder="Enter visual details"
+              dir={language === "ar" ? "rtl" : "ltr"}
+            />
+          </div>
+
+          {/* Flow */}
+          <div className="form-field">
+            <label className="field-label">Flow</label>
+            <input
+              type="text"
+              className="text-input"
+              value={data.Flow || ""}
+              onChange={(e) => setData({ ...data, Flow: e.target.value })}
+              placeholder="Enter flow details"
+              dir={language === "ar" ? "rtl" : "ltr"}
+            />
+          </div>
+
+          {/* Brand */}
+          <div className="form-field">
+            <label className="field-label">Brand</label>
+            <input
+              type="text"
+              className="text-input"
+              value={data.Brand || ""}
+              onChange={(e) => setData({ ...data, Brand: e.target.value })}
+              placeholder="Enter brand details"
+              dir={language === "ar" ? "rtl" : "ltr"}
+            />
+          </div>
+
+          {/* Case Study Images Section */}
+          <div className="form-field">
+            <label className="field-label">{t.caseStudyImages}</label>
+            <div className="case-images-grid">
+              {[0, 1, 2].map((index) => (
+                <div key={index} className="case-image-item">
+                  <div
+                    className="image-upload-box"
+                    onClick={() => document.getElementById(`caseImage${index}`).click()}
+                  >
+                    {caseImagePreviews[index] ? (
+                      <>
+                        <img 
+                          src={caseImagePreviews[index]} 
+                          alt={`Case ${index + 1}`} 
+                          className="image-preview" 
+                        />
+                        <button
+                          className="remove-image-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeCaseImage(index);
+                          }}
+                        >
+                          ×
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <span className="upload-icon">📷</span>
+                        <span className="upload-text">Case {index + 1}</span>
+                      </>
+                    )}
+                    <input
+                      id={`caseImage${index}`}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleCaseImageChange(e, index)}
+                      style={{ display: "none" }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          
 
           {/* Description */}
           <div className="form-field">
