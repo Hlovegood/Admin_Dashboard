@@ -141,6 +141,11 @@ const ProjectForm = () => {
           console.log("Fetched data:", result[0]); // Debug log
           const data = result[0];
           
+          // Log case images for debugging
+          console.log("Case_Img_1:", data.Case_Img_1);
+          console.log("Case_Img_2:", data.Case_Img_2);
+          console.log("Case_Img_3:", data.Case_Img_3);
+          
           // Set all individual states
           setTitle(data.Title || "");
           setRole(data.Role || "");
@@ -166,10 +171,11 @@ const ProjectForm = () => {
           setCaseImg2(data.Case_Img_2 || "");
           setCaseImg3(data.Case_Img_3 || "");
           
-          if (data.projectImage) {
-            setPreview(data.projectImage);
+          if (data.CoverImg) {
+            setPreview(data.CoverImg);
           }
           if (data.Case_Img_1 || data.Case_Img_2 || data.Case_Img_3) {
+            console.log("Setting case image previews");
             setCaseImagePreviews([
               data.Case_Img_1 || "",
               data.Case_Img_2 || "",
@@ -250,6 +256,7 @@ const ProjectForm = () => {
         Sol: sol,
         ProjectCategory: projectCategory,
         slug: slug,
+        CoverImg: preview,
         Case_Img_1: caseImg1,
         Case_Img_2: caseImg2,
         Case_Img_3: caseImg3,
@@ -296,10 +303,10 @@ const ProjectForm = () => {
         Sol: sol,
         ProjectCategory: projectCategory,
         slug: slug,
+        CoverImg: preview,
         Case_Img_1: caseImg1,
         Case_Img_2: caseImg2,
         Case_Img_3: caseImg3,
-        projectImage: preview,
         status: "draft"
       };
 
