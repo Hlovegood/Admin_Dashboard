@@ -5,12 +5,6 @@ import './ProfileEditor.css';
 
 export default function ProfileForm() {
   const [introduction, setIntroduction] = useState('');
-  const [socials, setSocials] = useState({
-    behance: '',
-    linkedin: '',
-    github: '',
-    instagram: ''
-  });
   const [altText, setAltText] = useState('');
   const [profileImage, setProfileImage] = useState(null);
   
@@ -19,6 +13,16 @@ export default function ProfileForm() {
   
   const [tools, setTools] = useState([]);
   const [newTool, setNewTool] = useState('');
+
+  // Individual link states
+  const [behanceLink, setBehanceLink] = useState('');
+  const [linkedinLink, setLinkedinLink] = useState('');
+  const [githubLink, setGithubLink] = useState('');
+  const [instagramLink, setInstagramLink] = useState('');
+
+  // Contact Links states
+  const [contactLinks, setContactLinks] = useState([]);
+  const [editableContactLinks, setEditableContactLinks] = useState([]);
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +30,21 @@ export default function ProfileForm() {
 
   useEffect(() => {
     fetchSkillsAndTools();
+    fetchContactLinks();
   }, []);
+
+  useEffect(() => {
+    // Populate individual link states from editableContactLinks
+    const behance = editableContactLinks.find(link => link.Link_Title === 'Behance');
+    const linkedin = editableContactLinks.find(link => link.Link_Title === 'LinkedIn');
+    const github = editableContactLinks.find(link => link.Link_Title === 'GitHub');
+    const instagram = editableContactLinks.find(link => link.Link_Title === 'Instagram');
+
+    setBehanceLink(behance?.Links || '');
+    setLinkedinLink(linkedin?.Links || '');
+    setGithubLink(github?.Links || '');
+    setInstagramLink(instagram?.Links || '');
+  }, [editableContactLinks]);
 
   const fetchSkillsAndTools = async () => {
     try {
@@ -66,6 +84,27 @@ export default function ProfileForm() {
     }
   };
 
+  const fetchContactLinks = async () => {
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('Contact')
+        .select('id, Link_Title, Links')
+        .not('Links', 'is', null);
+
+      if (fetchError) throw fetchError;
+
+      if (data) {
+        // Filter only rows with non-empty links
+        const filledLinks = data.filter(link => link.Links && link.Links.trim() !== '');
+        setContactLinks(filledLinks);
+        // Initialize editable contact links with the same data
+        setEditableContactLinks(filledLinks.map(link => ({ ...link })));
+      }
+    } catch (err) {
+      console.error('Error fetching contact links:', err);
+    }
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -82,27 +121,41 @@ export default function ProfileForm() {
     setSkills(skills.filter((_, i) => i !== index));
     
     try {
-      await supabase
+      const { error } = await supabase
         .from('Skills')
         .delete()
         .eq('Skills', skillToRemove);
+      
+      if (error) {
+        console.error('Error removing skill:', error);
+        alert(`Error removing skill: ${error.message}`);
+        fetchSkillsAndTools();
+      }
     } catch (err) {
       console.error('Error removing skill:', err);
+      alert(`Error removing skill: ${err.message}`);
+      fetchSkillsAndTools();
     }
   };
 
   const addSkill = async () => {
     if (newSkill.trim()) {
-      setSkills([...skills, newSkill.trim()]);
-      setNewSkill('');
-      
-      
       try {
-        await supabase
+        const { error } = await supabase
           .from('Skills')
           .insert([{ Skills: newSkill.trim() }]);
+        
+        if (error) {
+          console.error('Error adding skill:', error);
+          alert(`Error adding skill: ${error.message}`);
+          return;
+        }
+        
+        setSkills([...skills, newSkill.trim()]);
+        setNewSkill('');
       } catch (err) {
         console.error('Error adding skill:', err);
+        alert(`Error adding skill: ${err.message}`);
       }
     }
   };
@@ -111,35 +164,94 @@ export default function ProfileForm() {
     const toolToRemove = tools[index];
     setTools(tools.filter((_, i) => i !== index));
     
-   
     try {
-      await supabase
+      const { error } = await supabase
         .from('Skills')
         .delete()
         .eq('Apps', toolToRemove);
+      
+      if (error) {
+        console.error('Error removing tool:', error);
+        alert(`Error removing tool: ${error.message}`);
+        fetchSkillsAndTools();
+      }
     } catch (err) {
       console.error('Error removing tool:', err);
+      alert(`Error removing tool: ${err.message}`);
+      fetchSkillsAndTools();
     }
   };
 
   const addTool = async () => {
     if (newTool.trim()) {
-      setTools([...tools, newTool.trim()]);
-      setNewTool('');
-      
-      
       try {
-        await supabase
+        const { error } = await supabase
           .from('Skills')
           .insert([{ Apps: newTool.trim() }]);
+        
+        if (error) {
+          console.error('Error adding tool:', error);
+          alert(`Error adding tool: ${error.message}`);
+          return;
+        }
+        
+        setTools([...tools, newTool.trim()]);
+        setNewTool('');
       } catch (err) {
         console.error('Error adding tool:', err);
+        alert(`Error adding tool: ${err.message}`);
       }
     }
   };
 
-  const handleSave = () => {
-    console.log('Saving profile...');
+  const handleContactLinkChange = (id, newUrl) => {
+    setEditableContactLinks(
+      editableContactLinks.map(link =>
+        link.id === id ? { ...link, Links: newUrl } : link
+      )
+    );
+  };
+
+  const handleSave = async () => {
+    try {
+      // Save all contact links using individual states
+      const linksToSave = [
+        { title: 'Behance', url: behanceLink },
+        { title: 'LinkedIn', url: linkedinLink },
+        { title: 'GitHub', url: githubLink },
+        { title: 'Instagram', url: instagramLink }
+      ];
+
+      for (const linkData of linksToSave) {
+        const link = editableContactLinks.find(l => l.Link_Title === linkData.title);
+        if (link) {
+          const { error } = await supabase
+            .from('Contact')
+            .update({ Links: linkData.url })
+            .eq('id', link.id);
+
+          if (error) throw error;
+        }
+      }
+
+      // Update the editable contact links with new values
+      const updatedLinks = editableContactLinks.map(link => {
+        if (link.Link_Title === 'Behance') return { ...link, Links: behanceLink };
+        if (link.Link_Title === 'LinkedIn') return { ...link, Links: linkedinLink };
+        if (link.Link_Title === 'GitHub') return { ...link, Links: githubLink };
+        if (link.Link_Title === 'Instagram') return { ...link, Links: instagramLink };
+        return link;
+      });
+
+      setEditableContactLinks(updatedLinks);
+      setContactLinks(updatedLinks.map(link => ({ ...link })));
+      
+      console.log('Profile saved successfully!');
+      alert('Profile updated successfully!');
+    } catch (err) {
+      console.error('Error saving profile:', err);
+      alert(`Error saving profile: ${err.message}`);
+    }
   };
 
   const handleCancel = () => {
@@ -202,8 +314,12 @@ export default function ProfileForm() {
                     <input
                       type="text"
                       placeholder="Paste Link"
-                      value={socials.behance}
-                      onChange={(e) => setSocials({...socials, behance: e.target.value})}
+                      value={behanceLink}
+                      onChange={(e) => {
+                        setBehanceLink(e.target.value);
+                        const link = editableContactLinks.find(l => l.Link_Title === 'Behance');
+                        if (link) handleContactLinkChange(link.id, e.target.value);
+                      }}
                       className="form-input"
                     />
                   </div>
@@ -213,8 +329,12 @@ export default function ProfileForm() {
                     <input
                       type="text"
                       placeholder="Paste Link"
-                      value={socials.linkedin}
-                      onChange={(e) => setSocials({...socials, linkedin: e.target.value})}
+                      value={linkedinLink}
+                      onChange={(e) => {
+                        setLinkedinLink(e.target.value);
+                        const link = editableContactLinks.find(l => l.Link_Title === 'Linkedin');
+                        if (link) handleContactLinkChange(link.id, e.target.value);
+                      }}
                       className="form-input"
                     />
                   </div>
@@ -224,8 +344,12 @@ export default function ProfileForm() {
                     <input
                       type="text"
                       placeholder="Paste Link"
-                      value={socials.github}
-                      onChange={(e) => setSocials({...socials, github: e.target.value})}
+                      value={githubLink}
+                      onChange={(e) => {
+                        setGithubLink(e.target.value);
+                        const link = editableContactLinks.find(l => l.Link_Title === 'Github');
+                        if (link) handleContactLinkChange(link.id, e.target.value);
+                      }}
                       className="form-input"
                     />
                   </div>
@@ -235,8 +359,12 @@ export default function ProfileForm() {
                     <input
                       type="text"
                       placeholder="Paste Link"
-                      value={socials.instagram}
-                      onChange={(e) => setSocials({...socials, instagram: e.target.value})}
+                      value={instagramLink}
+                      onChange={(e) => {
+                        setInstagramLink(e.target.value);
+                        const link = editableContactLinks.find(l => l.Link_Title === 'Instagram');
+                        if (link) handleContactLinkChange(link.id, e.target.value);
+                      }}
                       className="form-input"
                     />
                   </div>
