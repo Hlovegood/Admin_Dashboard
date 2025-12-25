@@ -28,7 +28,7 @@ const translations = {
     description: "Project Description",
     problem: "The Problem",
     solution: "The Solution",
-    save: "Publish Project",
+    save: "Update Project",
     saveDraft: "Save Draft",
     cancel: "Cancel",
     enterTag: "+ Add tag",
@@ -87,9 +87,34 @@ const ProjectForm = () => {
   const { id } = useParams();
   const [language, setLanguage] = useState("en");
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({});
+  
+  // Individual state for each field
+  const [title, setTitle] = useState("");
+  const [role, setRole] = useState("");
+  const [time, setTime] = useState("");
+  const [year, setYear] = useState("");
+  const [apps, setApps] = useState("");
+  const [impact1, setImpact1] = useState("");
+  const [impact2, setImpact2] = useState("");
+  const [impact3, setImpact3] = useState("");
+  const [sub, setSub] = useState("");
+  const [research, setResearch] = useState("");
+  const [proto, setProto] = useState("");
+  const [dev, setDev] = useState("");
+  const [vis, setVis] = useState("");
+  const [flow, setFlow] = useState("");
+  const [brand, setBrand] = useState("");
+  const [ovr, setOvr] = useState("");
+  const [prob, setProb] = useState("");
+  const [sol, setSol] = useState("");
+  const [projectCategory, setProjectCategory] = useState("");
+  const [slug, setSlug] = useState("");
+  
   const [preview, setPreview] = useState(null);
   const [caseImagePreviews, setCaseImagePreviews] = useState(["", "", ""]);
+  const [caseImg1, setCaseImg1] = useState("");
+  const [caseImg2, setCaseImg2] = useState("");
+  const [caseImg3, setCaseImg3] = useState("");
 
   const t = translations[language];
 
@@ -114,15 +139,41 @@ const ProjectForm = () => {
 
         if (result && result.length > 0) {
           console.log("Fetched data:", result[0]); // Debug log
-          setData(result[0]);
-          if (result[0].projectImage) {
-            setPreview(result[0].projectImage);
+          const data = result[0];
+          
+          // Set all individual states
+          setTitle(data.Title || "");
+          setRole(data.Role || "");
+          setTime(data.Time || "");
+          setYear(data.Year || "");
+          setApps(data.Apps || "");
+          setImpact1(data.Impact_1 || "");
+          setImpact2(data.Impact_2 || "");
+          setImpact3(data.Impact_3 || "");
+          setSub(data.Sub || "");
+          setResearch(data.Research || "");
+          setProto(data.Proto || "");
+          setDev(data.Dev || "");
+          setVis(data.Vis || "");
+          setFlow(data.Flow || "");
+          setBrand(data.Brand || "");
+          setOvr(data.Ovr || "");
+          setProb(data.Prob || "");
+          setSol(data.Sol || "");
+          setProjectCategory(data.ProjectCategory || "");
+          setSlug(data.slug || "");
+          setCaseImg1(data.Case_Img_1 || "");
+          setCaseImg2(data.Case_Img_2 || "");
+          setCaseImg3(data.Case_Img_3 || "");
+          
+          if (data.projectImage) {
+            setPreview(data.projectImage);
           }
-          if (result[0].Case_Img_1 || result[0].Case_Img_2 || result[0].Case_Img_3) {
+          if (data.Case_Img_1 || data.Case_Img_2 || data.Case_Img_3) {
             setCaseImagePreviews([
-              result[0].Case_Img_1 || "",
-              result[0].Case_Img_2 || "",
-              result[0].Case_Img_3 || ""
+              data.Case_Img_1 || "",
+              data.Case_Img_2 || "",
+              data.Case_Img_3 || ""
             ]);
           }
         } else {
@@ -144,7 +195,6 @@ const ProjectForm = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
-        setData({ ...data, projectImage: reader.result });
       };
       reader.readAsDataURL(file);
     }
@@ -159,8 +209,9 @@ const ProjectForm = () => {
         newPreviews[index] = reader.result;
         setCaseImagePreviews(newPreviews);
         
-        const fieldName = `Case_Img_${index + 1}`;
-        setData({ ...data, [fieldName]: reader.result });
+        if (index === 0) setCaseImg1(reader.result);
+        else if (index === 1) setCaseImg2(reader.result);
+        else if (index === 2) setCaseImg3(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -171,22 +222,49 @@ const ProjectForm = () => {
     newPreviews[index] = "";
     setCaseImagePreviews(newPreviews);
     
-    const fieldName = `Case_Img_${index + 1}`;
-    setData({ ...data, [fieldName]: "" });
+    if (index === 0) setCaseImg1("");
+    else if (index === 1) setCaseImg2("");
+    else if (index === 2) setCaseImg3("");
   };
 
   const handleSubmit = async () => {
     try {
+      const updateData = {
+        Title: title,
+        Role: role,
+        Time: time,
+        Year: year,
+        Apps: apps,
+        Impact_1: impact1,
+        Impact_2: impact2,
+        Impact_3: impact3,
+        Sub: sub,
+        Research: research,
+        Proto: proto,
+        Dev: dev,
+        Vis: vis,
+        Flow: flow,
+        Brand: brand,
+        Ovr: ovr,
+        Prob: prob,
+        Sol: sol,
+        ProjectCategory: projectCategory,
+        slug: slug,
+        Case_Img_1: caseImg1,
+        Case_Img_2: caseImg2,
+        Case_Img_3: caseImg3,
+      };
+
       const { error } = await supabase
         .from("Project Details")
-        .update(data)
+        .update(updateData)
         .eq("id", id);
 
       if (error) {
         console.error("Error updating project:", error);
-        alert("Error updating project!");
+        alert(`Error updating project: ${error.message}`);
       } else {
-        console.log("Form Data:", data);
+        console.log("Form Data:", updateData);
         alert("Project published successfully!");
       }
     } catch (err) {
@@ -197,14 +275,42 @@ const ProjectForm = () => {
 
   const handleSaveDraft = async () => {
     try {
+      const updateData = {
+        Title: title,
+        Role: role,
+        Time: time,
+        Year: year,
+        Apps: apps,
+        Impact_1: impact1,
+        Impact_2: impact2,
+        Impact_3: impact3,
+        Sub: sub,
+        Research: research,
+        Proto: proto,
+        Dev: dev,
+        Vis: vis,
+        Flow: flow,
+        Brand: brand,
+        Ovr: ovr,
+        Prob: prob,
+        Sol: sol,
+        ProjectCategory: projectCategory,
+        slug: slug,
+        Case_Img_1: caseImg1,
+        Case_Img_2: caseImg2,
+        Case_Img_3: caseImg3,
+        projectImage: preview,
+        status: "draft"
+      };
+
       const { error } = await supabase
         .from("Project Details")
-        .update({ ...data, status: "draft" })
+        .update(updateData)
         .eq("id", id);
 
       if (error) {
         console.error("Error saving draft:", error);
-        alert("Error saving draft!");
+        alert(`Error saving draft: ${error.message}`);
       } else {
         alert("Draft saved successfully!");
       }
@@ -261,8 +367,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.Title || ""}
-              onChange={(e) => setData({ ...data, Title: e.target.value })}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter project name"
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -277,8 +383,8 @@ const ProjectForm = () => {
               <input
                 type="text"
                 className="text-input"
-                value={data.Role || ""}
-                onChange={(e) => setData({ ...data, role: e.target.value })}
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
                 placeholder="Your role"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
@@ -289,8 +395,8 @@ const ProjectForm = () => {
               <input
                 type="text"
                 className="text-input"
-                value={data.Time || ""}
-                onChange={(e) => setData({ ...data, duration: e.target.value })}
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
                 placeholder="e.g., 6 months"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
@@ -304,8 +410,8 @@ const ProjectForm = () => {
               <input
                 type="text"
                 className="text-input"
-                value={data.Year || ""}
-                onChange={(e) => setData({ ...data, year: e.target.value })}
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
                 placeholder="2024"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
@@ -316,8 +422,8 @@ const ProjectForm = () => {
               <input
                 type="text"
                 className="text-input"
-                value={data.Apps || ""}
-                onChange={(e) => setData({ ...data, apps: e.target.value })}
+                value={apps}
+                onChange={(e) => setApps(e.target.value)}
                 placeholder="Tools used"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
@@ -331,8 +437,8 @@ const ProjectForm = () => {
               <input
                 type="number"
                 className="text-input"
-                value={data.Impact_1 || ""}
-                onChange={(e) => setData({ ...data, customerSatisfaction: e.target.value })}
+                value={impact1}
+                onChange={(e) => setImpact1(e.target.value)}
                 placeholder="85"
                 min="0"
                 max="100"
@@ -349,8 +455,8 @@ const ProjectForm = () => {
               <input
                 type="number"
                 className="text-input"
-                value={data.Impact_2 || ""}
-                onChange={(e) => setData({ ...data, userEngagement: e.target.value })}
+                value={impact2}
+                onChange={(e) => setImpact2(e.target.value)}
                 placeholder="75"
                 min="0"
                 max="100"
@@ -367,8 +473,8 @@ const ProjectForm = () => {
               <input
                 type="number"
                 className="text-input"
-                value={data.Impact_3 || ""}
-                onChange={(e) => setData({ ...data, loadTime: e.target.value })}
+                value={impact3}
+                onChange={(e) => setImpact3(e.target.value)}
                 placeholder="1200"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
@@ -382,8 +488,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.Sub || ""}
-              onChange={(e) => setData({ ...data, Sub: e.target.value })}
+              value={sub}
+              onChange={(e) => setSub(e.target.value)}
               placeholder="Enter subtitle"
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -395,8 +501,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.Research || ""}
-              onChange={(e) => setData({ ...data, Research: e.target.value })}
+              value={research}
+              onChange={(e) => setResearch(e.target.value)}
               placeholder="Enter research details"
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -408,8 +514,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.Proto || ""}
-              onChange={(e) => setData({ ...data, Proto: e.target.value })}
+              value={proto}
+              onChange={(e) => setProto(e.target.value)}
               placeholder="Enter prototype details"
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -421,8 +527,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.Dev || ""}
-              onChange={(e) => setData({ ...data, Dev: e.target.value })}
+              value={dev}
+              onChange={(e) => setDev(e.target.value)}
               placeholder="Enter developer name/details"
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -434,8 +540,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.Vis || ""}
-              onChange={(e) => setData({ ...data, Vis: e.target.value })}
+              value={vis}
+              onChange={(e) => setVis(e.target.value)}
               placeholder="Enter visual details"
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -447,8 +553,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.Flow || ""}
-              onChange={(e) => setData({ ...data, Flow: e.target.value })}
+              value={flow}
+              onChange={(e) => setFlow(e.target.value)}
               placeholder="Enter flow details"
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -460,8 +566,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.Brand || ""}
-              onChange={(e) => setData({ ...data, Brand: e.target.value })}
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
               placeholder="Enter brand details"
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -520,8 +626,8 @@ const ProjectForm = () => {
             <label className="field-label">{t.description} <span className="required">*</span></label>
             <textarea
               className="textarea-input"
-              value={data.Ovr || ""}
-              onChange={(e) => setData({ ...data, description: e.target.value })}
+              value={ovr}
+              onChange={(e) => setOvr(e.target.value)}
               placeholder="Describe the project"
               rows="4"
               dir={language === "ar" ? "rtl" : "ltr"}
@@ -533,8 +639,8 @@ const ProjectForm = () => {
             <label className="field-label">{t.problem} <span className="required">*</span></label>
             <textarea
               className="textarea-input"
-              value={data.Prob || ""}
-              onChange={(e) => setData({ ...data, problem: e.target.value })}
+              value={prob}
+              onChange={(e) => setProb(e.target.value)}
               placeholder="What problem did this project solve?"
               rows="4"
               dir={language === "ar" ? "rtl" : "ltr"}
@@ -546,8 +652,8 @@ const ProjectForm = () => {
             <label className="field-label">{t.solution} <span className="required">*</span></label>
             <textarea
               className="textarea-input"
-              value={data.Sol || ""}
-              onChange={(e) => setData({ ...data, solution: e.target.value })}
+              value={sol}
+              onChange={(e) => setSol(e.target.value)}
               placeholder="How did you solve it?"
               rows="4"
               dir={language === "ar" ? "rtl" : "ltr"}
@@ -563,8 +669,8 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.ProjectCategory || ""}
-              onChange={(e) => setData({ ...data, ProjectCategory: e.target.value })}
+              value={projectCategory}
+              onChange={(e) => setProjectCategory(e.target.value)}
               placeholder={t.enterTag}
               dir={language === "ar" ? "rtl" : "ltr"}
             />
@@ -573,34 +679,11 @@ const ProjectForm = () => {
             <input
               type="text"
               className="text-input"
-              value={data.slug || ""}
-              onChange={(e) => setData({ ...data, slug: e.target.value })}
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
               placeholder={t.enterSlug}
               dir={language === "ar" ? "rtl" : "ltr"}
             />
-          </div>
-
-          {/* Visibility Settings */}
-          <div className="form-field">
-            <label className="field-label">{t.visibility}</label>
-            <div className="visibility-container">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={data.public || false}
-                  onChange={(e) => setData({ ...data, public: e.target.checked })}
-                />
-                <span className="checkbox-text">{t.public}</span>
-              </label>
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={data.private || false}
-                  onChange={(e) => setData({ ...data, private: e.target.checked })}
-                />
-                <span className="checkbox-text">{t.private}</span>
-              </label>
-            </div>
           </div>
 
           {/* Action Buttons */}
