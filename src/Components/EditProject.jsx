@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ImageUpload.css";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { supabase } from "../supabase";
 
 const translations = {
@@ -17,12 +17,13 @@ const translations = {
     apps: "Apps/Platforms",
     programmingLanguages: "Programming Languages",
     tags: "Project Tags",
-    slug: "Project Slug Name",
     teamMembers: "Team Members",
+    visibility: "Visibility Settings",
+    public: "Public",
+    private: "Private",
     customerSatisfaction: "Customer Satisfaction (%)",
     userEngagement: "User Engagement (%)",
     loadTime: "Page Load Time (ms)",
-    caseStudyImages: "Case Study Images (Max 3)",
     description: "Project Description",
     problem: "The Problem",
     solution: "The Solution",
@@ -30,7 +31,6 @@ const translations = {
     saveDraft: "Save Draft",
     cancel: "Cancel",
     enterTag: "+ Add tag",
-    enterSlug: "+ Add Slug Name",
     selectLanguage: "Language / اللغة",
   },
   ar: {
@@ -47,10 +47,12 @@ const translations = {
     programmingLanguages: "لغات البرمجة",
     tags: "علامات المشروع",
     teamMembers: "أعضاء الفريق",
+    visibility: "إعدادات الرؤية",
+    public: "عام",
+    private: "خاص",
     customerSatisfaction: "رضا العميل (%)",
     userEngagement: "تفاعل المستخدم (%)",
     loadTime: "وقت تحميل الصفحة (ms)",
-    caseStudyImages: "صور دراسة الحالة (حد أقصى 3)",
     description: "وصف المشروع",
     problem: "المشاكل التي واجهتها",
     solution: "الحل المقدم",
@@ -81,38 +83,10 @@ const LanguageSwitcher = ({ language, onLanguageChange }) => (
 
 const ProjectForm = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [language, setLanguage] = useState("en");
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({
-Apps:"",
-CoverImg: "",
-Dev: "",
-Case_Img_1: "",
-Case_Img_2: "",
-Case_Img_3: "",
-Impact_1: "",
-Impact_2: "",
-Impact_3: "",
-Learnings: "",
-Ovr: "",
-Prob: "",
-Proto: "",
-Research: "",
-Role: "",
-Sol: "",
-Time: "",
-Title: "",
-Year: "",
-slug:"",
-ProjectCategory:"",
-Sub: "",
-Vis: "",
-Flow: "",
-Brand: "",
-  });
+  const [data, setData] = useState({});
   const [preview, setPreview] = useState(null);
-  const [caseImagePreviews, setCaseImagePreviews] = useState(["", "", ""]);
 
   const t = translations[language];
 
@@ -136,20 +110,10 @@ Brand: "",
         }
 
         if (result && result.length > 0) {
-          console.log("Fetched data:", result[0]);
+          console.log("Fetched data:", result[0]); // Debug log
           setData(result[0]);
-          if (result[0].CoverImg) {
-            setPreview(result[0].CoverImg);
-          }
-          if (result[0].Case_Img_1 || result[0].Case_Img_2 || result[0].Case_Img_3) {
-            setCaseImagePreviews([
-              result[0].Case_Img_1 || "",
-              result[0].Img_1 || "",
-              result[0].Case_Img_2 || "",
-              result[0].Img_2 || "",
-              result[0].Case_Img_3 || "",
-              result[0].Img_3 || ""
-            ]);
+          if (result[0].projectImage) {
+            setPreview(result[0].projectImage);
           }
         } else {
           console.log("No data found for id:", id);
@@ -170,90 +134,44 @@ Brand: "",
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
-        setData({ ...data, CoverImg: reader.result });
+        setData({ ...data, projectImage: reader.result });
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleCaseImageChange = (e, index) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const newPreviews = [...caseImagePreviews];
-        newPreviews[index] = reader.result;
-        setCaseImagePreviews(newPreviews);
-        
-        const fieldName = `Case_Img_${index + 1}`;
-        setData({ ...data, [fieldName]: reader.result });
-      };
-      reader.readAsDataURL(file);
+  const handleSubmit = async () => {
+    try {
+      const { error } = await supabase
+        .from("Project Details")
+        .update(data)
+        .eq("id", id);
+
+      if (error) {
+        console.error("Error updating project:", error);
+        alert("Error updating project!");
+      } else {
+        console.log("Form Data:", data);
+        alert("Project published successfully!");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Error updating project!");
     }
   };
-
-  const removeCaseImage = (index) => {
-    const newPreviews = [...caseImagePreviews];
-    newPreviews[index] = "";
-    setCaseImagePreviews(newPreviews);
-    
-    const fieldName = `Case_Img_${index + 1}`;
-    setData({ ...data, [fieldName]: "" });
-  };
-
-  async function handleSubmit() {
-  try {
-    const payload = {
-      ...data,  
-    };
-
-    const { data: result, error } = await supabase
-      .from("Project Details")
-      .insert([payload])
-      .select();
-
-    if (error) {
-      console.error("Supabase insert error:", error);
-      alert(error.message);
-      return;
-    }
-
-    alert("Project published successfully!");
-    navigate(-1);
-  } catch (err) {
-    console.error("Unexpected error:", err);
-    alert("Something went wrong");
-  }
-}
-
 
   const handleSaveDraft = async () => {
     try {
-      const draftData = { ...data, status: "draft" };
-      
-      if (id) {
-        const { error } = await supabase
-          .from("Project Details")
-          .update(draftData)
-          .eq("id", id);
+      const { error } = await supabase
+        .from("Project Details")
+        .update({ ...data, status: "draft" })
+        .eq("id", id);
 
-        if (error) {
-          console.error("Error saving draft:", error);
-          alert("Error saving draft!");
-        } else {
-          alert("Draft saved successfully!");
-        }
+      if (error) {
+        console.error("Error saving draft:", error);
+        alert("Error saving draft!");
       } else {
-        const { error } = await supabase
-          .from("Project Details")
-          .insert([draftData]);
-
-        if (error) {
-          console.error("Error saving draft:", error);
-          alert("Error saving draft!");
-        } else {
-          alert("Draft saved successfully!");
-        }
+        alert("Draft saved successfully!");
       }
     } catch (err) {
       console.error("Error:", err);
@@ -263,11 +181,14 @@ Brand: "",
 
   const handleCancel = () => {
     if (window.confirm("Are you sure you want to cancel? All changes will be lost.")) {
+      // Reload the original data
       window.location.reload();
     }
   };
 
   if (loading) return <p>Loading...</p>;
+
+  if (!id) return <p>No project ID provided</p>;
 
   return (
     <div className="project-form-container">
@@ -298,6 +219,7 @@ Brand: "",
           </div>
 
 
+
           {/* Project Name */}
           <div className="form-field">
             <label className="field-label">{t.projectName} <span className="required">*</span></label>
@@ -312,18 +234,19 @@ Brand: "",
           </div>
 
 
+
           {/* Role and Duration Row */}
           <div className="form-row">
             <div className="form-field">
               <label className="field-label">{t.role} <span className="required">*</span></label>
-            <input
-              type="text"
-              className="text-input"
-              value={data.Role || ""}
-              onChange={(e) => setData({ ...data, Role: e.target.value })}
-              placeholder="Enter Your Role"
-              dir={language === "ar" ? "rtl" : "ltr"}
-            />
+              <input
+                type="text"
+                className="text-input"
+                value={data.Role || ""}
+                onChange={(e) => setData({ ...data, role: e.target.value })}
+                placeholder="Your role"
+                dir={language === "ar" ? "rtl" : "ltr"}
+              />
             </div>
 
             <div className="form-field">
@@ -332,7 +255,7 @@ Brand: "",
                 type="text"
                 className="text-input"
                 value={data.Time || ""}
-                onChange={(e) => setData({ ...data, Time: e.target.value })}
+                onChange={(e) => setData({ ...data, duration: e.target.value })}
                 placeholder="e.g., 6 months"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
@@ -347,7 +270,7 @@ Brand: "",
                 type="text"
                 className="text-input"
                 value={data.Year || ""}
-                onChange={(e) => setData({ ...data, Year: e.target.value })}
+                onChange={(e) => setData({ ...data, year: e.target.value })}
                 placeholder="2024"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
@@ -359,7 +282,7 @@ Brand: "",
                 type="text"
                 className="text-input"
                 value={data.Apps || ""}
-                onChange={(e) => setData({ ...data, Apps: e.target.value })}
+                onChange={(e) => setData({ ...data, apps: e.target.value })}
                 placeholder="Tools used"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
@@ -374,7 +297,7 @@ Brand: "",
                 type="number"
                 className="text-input"
                 value={data.Impact_1 || ""}
-                onChange={(e) => setData({ ...data, Impact_1: e.target.value })}
+                onChange={(e) => setData({ ...data, customerSatisfaction: e.target.value })}
                 placeholder="85"
                 min="0"
                 max="100"
@@ -392,7 +315,7 @@ Brand: "",
                 type="number"
                 className="text-input"
                 value={data.Impact_2 || ""}
-                onChange={(e) => setData({ ...data, Impact_2: e.target.value })}
+                onChange={(e) => setData({ ...data, userEngagement: e.target.value })}
                 placeholder="75"
                 min="0"
                 max="100"
@@ -410,150 +333,11 @@ Brand: "",
                 type="number"
                 className="text-input"
                 value={data.Impact_3 || ""}
-                onChange={(e) => setData({ ...data, Impact_3: e.target.value })}
+                onChange={(e) => setData({ ...data, loadTime: e.target.value })}
                 placeholder="1200"
                 dir={language === "ar" ? "rtl" : "ltr"}
               />
               <span className="input-suffix">ms</span>
-            </div>
-          </div>
-
-        
-
-          {/* Subtitle */}
-          <div className="form-field">
-            <label className="field-label">Subtitle</label>
-            <input
-              type="text"
-              className="text-input"
-              value={data.Sub || ""}
-              onChange={(e) => setData({ ...data, Sub: e.target.value })}
-              placeholder="Enter subtitle"
-              dir={language === "ar" ? "rtl" : "ltr"}
-            />
-          </div>
-
-          {/* Research */}
-          <div className="form-field">
-            <label className="field-label">Research</label>
-            <input
-              type="text"
-              className="text-input"
-              value={data.Research || ""}
-              onChange={(e) => setData({ ...data, Research: e.target.value })}
-              placeholder="Enter research details"
-              dir={language === "ar" ? "rtl" : "ltr"}
-            />
-          </div>
-
-          {/* Prototype */}
-          <div className="form-field">
-            <label className="field-label">Prototype</label>
-            <input
-              type="text"
-              className="text-input"
-              value={data.Proto || ""}
-              onChange={(e) => setData({ ...data, Proto: e.target.value })}
-              placeholder="Enter prototype details"
-              dir={language === "ar" ? "rtl" : "ltr"}
-            />
-          </div>
-
-          {/* Developer */}
-          <div className="form-field">
-            <label className="field-label">Developer</label>
-            <input
-              type="text"
-              className="text-input"
-              value={data.Dev || ""}
-              onChange={(e) => setData({ ...data, Dev: e.target.value })}
-              placeholder="Enter developer name/details"
-              dir={language === "ar" ? "rtl" : "ltr"}
-            />
-          </div>
-
-          {/* Visual */}
-          <div className="form-field">
-            <label className="field-label">Visual</label>
-            <input
-              type="text"
-              className="text-input"
-              value={data.Vis || ""}
-              onChange={(e) => setData({ ...data, Vis: e.target.value })}
-              placeholder="Enter visual details"
-              dir={language === "ar" ? "rtl" : "ltr"}
-            />
-          </div>
-
-          {/* Flow */}
-          <div className="form-field">
-            <label className="field-label">Flow</label>
-            <input
-              type="text"
-              className="text-input"
-              value={data.Flow || ""}
-              onChange={(e) => setData({ ...data, Flow: e.target.value })}
-              placeholder="Enter flow details"
-              dir={language === "ar" ? "rtl" : "ltr"}
-            />
-          </div>
-
-          {/* Brand */}
-          <div className="form-field">
-            <label className="field-label">Brand</label>
-            <input
-              type="text"
-              className="text-input"
-              value={data.Brand || ""}
-              onChange={(e) => setData({ ...data, Brand: e.target.value })}
-              placeholder="Enter brand details"
-              dir={language === "ar" ? "rtl" : "ltr"}
-            />
-          </div>
-
-            {/* Case Study Images Section */}
-          <div className="form-field">
-            <label className="field-label">{t.caseStudyImages}</label>
-            <div className="case-images-grid">
-              {[0, 1, 2].map((index) => (
-                <div key={index} className="case-image-item">
-                  <div
-                    className="image-upload-box"
-                    onClick={() => document.getElementById(`caseImage${index}`).click()}
-                  >
-                    {caseImagePreviews[index] ? (
-                      <>
-                        <img 
-                          src={caseImagePreviews[index]} 
-                          alt={`Case ${index + 1}`} 
-                          className="image-preview" 
-                        />
-                        <button
-                          className="remove-image-btn"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeCaseImage(index);
-                          }}
-                        >
-                          ×
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <span className="upload-icon">📷</span>
-                        <span className="upload-text">Case {index + 1}</span>
-                      </>
-                    )}
-                    <input
-                      id={`caseImage${index}`}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleCaseImageChange(e, index)}
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -563,7 +347,7 @@ Brand: "",
             <textarea
               className="textarea-input"
               value={data.Ovr || ""}
-              onChange={(e) => setData({ ...data, Ovr: e.target.value })}
+              onChange={(e) => setData({ ...data, description: e.target.value })}
               placeholder="Describe the project"
               rows="4"
               dir={language === "ar" ? "rtl" : "ltr"}
@@ -576,7 +360,7 @@ Brand: "",
             <textarea
               className="textarea-input"
               value={data.Prob || ""}
-              onChange={(e) => setData({ ...data, Prob: e.target.value })}
+              onChange={(e) => setData({ ...data, problem: e.target.value })}
               placeholder="What problem did this project solve?"
               rows="4"
               dir={language === "ar" ? "rtl" : "ltr"}
@@ -589,7 +373,7 @@ Brand: "",
             <textarea
               className="textarea-input"
               value={data.Sol || ""}
-              onChange={(e) => setData({ ...data, Sol: e.target.value })}
+              onChange={(e) => setData({ ...data, solution: e.target.value })}
               placeholder="How did you solve it?"
               rows="4"
               dir={language === "ar" ? "rtl" : "ltr"}
@@ -599,7 +383,7 @@ Brand: "",
 
         <div className="form-column-right">
 
-          {/* Tags */}
+            {/* Tags */}
           <div className="form-field">
             <label className="field-label">{t.tags}</label>
             <input
@@ -622,9 +406,28 @@ Brand: "",
             />
           </div>
 
-
-
-
+          {/* Visibility Settings */}
+          <div className="form-field">
+            <label className="field-label">{t.visibility}</label>
+            <div className="visibility-container">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={data.public || false}
+                  onChange={(e) => setData({ ...data, public: e.target.checked })}
+                />
+                <span className="checkbox-text">{t.public}</span>
+              </label>
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={data.private || false}
+                  onChange={(e) => setData({ ...data, private: e.target.checked })}
+                />
+                <span className="checkbox-text">{t.private}</span>
+              </label>
+            </div>
+          </div>
 
           {/* Action Buttons */}
           <div className="form-actions">

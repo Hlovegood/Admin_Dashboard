@@ -72,6 +72,7 @@ id: ""
               Mockup={Detail.CoverImg}
               ProjectTitle={Detail.Title}
               Year={Detail.Year}
+              id={Detail.id}
             />
 
   }

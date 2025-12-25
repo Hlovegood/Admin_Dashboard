@@ -1,33 +1,35 @@
 import React from "react";
 import './ProjectHolder.css';
+import { Link } from 'react-router-dom';
+import { supabase } from '../supabase';
 
 const ProjectHolder = (props) => {
+  async function deleteProject(id) {
+    const res = await supabase.from("Project Details").delete().eq("id", id);
+  }
+
   return (
     <>
       <section className="Container">
-          <img src={props.Mockup} alt="" className="Mockup" />
-        
+        <img src={props.Mockup} alt="" className="Mockup" />
 
-        <article >
-            <div className="ProjectData">
+        <article>
+          <div className="ProjectData">
             <h3 className="Title">
-                {props.ProjectTitle}
+              {props.ProjectTitle}
             </h3>
 
             <h6 className="Year">
-                {props.Year}
+              {props.Year}
             </h6>
-            </div>
-        </article>
+          </div>
+          <article className="Buttons">
+            <Link to={`/edit-project/${props.id}`}>
+              <button>Edit</button>
+            </Link>
 
-        <article className="Buttons">
-            <button>
-                Edit
-            </button>
-
-            <button>
-                Delete
-            </button>
+            <button onClick={() => deleteProject(props.id)}>Delete</button>
+          </article>
         </article>
       </section>
     </>

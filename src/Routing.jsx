@@ -8,6 +8,7 @@ import ProjectEditor from './pages/ProjectEditor';
 import Pages from '../src/pages/Pages'
 import Profile from './pages/Profile';
 import Mail from './pages/Mail';
+import EditProject from './pages/EditProject';
 const Routing = () => {
     return ( <>
     <BrowserRouter>
@@ -21,6 +22,7 @@ const Routing = () => {
         <Route path='/pages' element={<Pages/>}/>
         <Route path= '/profile' element={<Profile/>}/>
         <Route path='/mail' element={<Mail/>}/>
+        <Route path='/edit-project/:id' element={<EditProject/>}/>
 
 
     </Routes>

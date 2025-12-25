@@ -344,17 +344,6 @@ export default function ProfileForm() {
                 </div>
               </div>
 
-              {/* Alt Text */}
-              <div className="form-field">
-                <label className="form-label">Alt text</label>
-                <input
-                  type="text"
-                  placeholder="Enter Alt text"
-                  value={altText}
-                  onChange={(e) => setAltText(e.target.value)}
-                  className="form-input"
-                />
-              </div>
 
               {/* Action Buttons */}
               <div className="action-buttons">

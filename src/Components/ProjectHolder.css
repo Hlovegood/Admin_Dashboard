@@ -23,7 +23,7 @@
     display: flex;
     padding: 16px;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     gap: 12px;
     border-radius: 16px;
     border: 1.63px solid #FFB574;
