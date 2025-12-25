@@ -114,6 +114,12 @@ Brand: "",
   const [preview, setPreview] = useState(null);
   const [caseImagePreviews, setCaseImagePreviews] = useState(["", "", ""]);
 
+  // Confirmation Modal states
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [confirmTitle, setConfirmTitle] = useState('');
+  const [confirmMessage, setConfirmMessage] = useState('');
+
   const t = translations[language];
 
   useEffect(() => {
@@ -164,6 +170,25 @@ Brand: "",
     callGetAPI();
   }, [id]);
 
+  const openConfirmModal = (title, message, action) => {
+    setConfirmTitle(title);
+    setConfirmMessage(message);
+    setConfirmAction(() => action);
+    setShowConfirmModal(true);
+  };
+
+  const closeConfirmModal = () => {
+    setShowConfirmModal(false);
+    setConfirmAction(null);
+  };
+
+  const handleConfirm = async () => {
+    if (confirmAction) {
+      await confirmAction();
+    }
+    closeConfirmModal();
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -202,63 +227,71 @@ Brand: "",
   };
 
   async function handleSubmit() {
-  try {
-    const payload = {
-      ...data,  
+    const performPublish = async () => {
+      try {
+        const payload = {
+          ...data,  
+        };
+
+        const { data: error } = await supabase
+          .from("Project Details")
+          .insert([payload])
+          .select();
+
+        if (error) {
+          console.error("Supabase insert error:", error);
+          alert(error.message);
+          return;
+        }
+
+        alert("Project published successfully!");
+        navigate(-1);
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        alert("Something went wrong");
+      }
     };
 
-    const { data: error } = await supabase
-      .from("Project Details")
-      .insert([payload])
-      .select();
-
-    if (error) {
-      console.error("Supabase insert error:", error);
-      alert(error.message);
-      return;
-    }
-
-    alert("Project published successfully!");
-    navigate(-1);
-  } catch (err) {
-    console.error("Unexpected error:", err);
-    alert("Something went wrong");
+    openConfirmModal('Publish Project', 'Are you sure you want to publish this project?', performPublish);
   }
-}
 
 
   const handleSaveDraft = async () => {
-    try {
-      const draftData = { ...data, status: "draft" };
-      
-      if (id) {
-        const { error } = await supabase
-          .from("Project Details")
-          .update(draftData)
-          .eq("id", id);
+    const performSaveDraft = async () => {
+      try {
+        const draftData = { ...data, status: "draft" };
+        
+        if (id) {
+          const { error } = await supabase
+            .from("Project Details")
+            .update(draftData)
+            .eq("id", id);
 
-        if (error) {
-          console.error("Error saving draft:", error);
-          alert("Error saving draft!");
+          if (error) {
+            console.error("Error saving draft:", error);
+            alert("Error saving draft!");
+          } else {
+            alert("Draft saved successfully!");
+          }
         } else {
-          alert("Draft saved successfully!");
-        }
-      } else {
-        const { error } = await supabase
-          .from("Project Details")
-          .insert([draftData]);
+          const { error } = await supabase
+            .from("Project Details")
+            .insert([draftData]);
 
-        if (error) {
-          console.error("Error saving draft:", error);
-          alert("Error saving draft!");
-        } else {
-          alert("Draft saved successfully!");
+          if (error) {
+            console.error("Error saving draft:", error);
+            alert("Error saving draft!");
+          } else {
+            alert("Draft saved successfully!");
+          }
         }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("Error saving draft!");
       }
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Error saving draft!");
-    }
+    };
+
+    openConfirmModal('Save Draft', 'Save this project as a draft?', performSaveDraft);
   };
 
   const handleCancel = () => {
@@ -640,6 +673,24 @@ Brand: "",
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="confirm-modal-overlay">
+          <div className="confirm-modal">
+            <h2 className="confirm-modal-title">{confirmTitle}</h2>
+            <p className="confirm-modal-message">{confirmMessage}</p>
+            <div className="confirm-modal-buttons">
+              <button onClick={closeConfirmModal} className="confirm-modal-cancel">
+                Cancel
+              </button>
+              <button onClick={handleConfirm} className="confirm-modal-confirm">
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

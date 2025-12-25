@@ -27,6 +27,12 @@ export default function ProfileForm() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Confirmation Modal states
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [confirmTitle, setConfirmTitle] = useState('');
+  const [confirmMessage, setConfirmMessage] = useState('');
+
 
   useEffect(() => {
     fetchSkillsAndTools();
@@ -116,91 +122,126 @@ export default function ProfileForm() {
     }
   };
 
+  const openConfirmModal = (title, message, action) => {
+    setConfirmTitle(title);
+    setConfirmMessage(message);
+    setConfirmAction(() => action);
+    setShowConfirmModal(true);
+  };
+
+  const closeConfirmModal = () => {
+    setShowConfirmModal(false);
+    setConfirmAction(null);
+  };
+
+  const handleConfirm = async () => {
+    if (confirmAction) {
+      await confirmAction();
+    }
+    closeConfirmModal();
+  };
+
   const removeSkill = async (index) => {
     const skillToRemove = skills[index];
-    setSkills(skills.filter((_, i) => i !== index));
-    
-    try {
-      const { error } = await supabase
-        .from('Skills')
-        .delete()
-        .eq('Skills', skillToRemove);
+    const performRemove = async () => {
+      setSkills(skills.filter((_, i) => i !== index));
       
-      if (error) {
-        console.error('Error removing skill:', error);
-        alert(`Error removing skill: ${error.message}`);
+      try {
+        const { error } = await supabase
+          .from('Skills')
+          .delete()
+          .eq('Skills', skillToRemove);
+        
+        if (error) {
+          console.error('Error removing skill:', error);
+          alert(`Error removing skill: ${error.message}`);
+          fetchSkillsAndTools();
+        }
+      } catch (err) {
+        console.error('Error removing skill:', err);
+        alert(`Error removing skill: ${err.message}`);
         fetchSkillsAndTools();
       }
-    } catch (err) {
-      console.error('Error removing skill:', err);
-      alert(`Error removing skill: ${err.message}`);
-      fetchSkillsAndTools();
-    }
+    };
+
+    openConfirmModal('Remove Skill', `Are you sure you want to remove "${skillToRemove}"?`, performRemove);
   };
 
   const addSkill = async () => {
     if (newSkill.trim()) {
-      try {
-        const { error } = await supabase
-          .from('Skills')
-          .insert([{ Skills: newSkill.trim() }]);
-        
-        if (error) {
-          console.error('Error adding skill:', error);
-          alert(`Error adding skill: ${error.message}`);
-          return;
+      const performAdd = async () => {
+        try {
+          const { error } = await supabase
+            .from('Skills')
+            .insert([{ Skills: newSkill.trim() }]);
+          
+          if (error) {
+            console.error('Error adding skill:', error);
+            alert(`Error adding skill: ${error.message}`);
+            return;
+          }
+          
+          setSkills([...skills, newSkill.trim()]);
+          setNewSkill('');
+        } catch (err) {
+          console.error('Error adding skill:', err);
+          alert(`Error adding skill: ${err.message}`);
         }
-        
-        setSkills([...skills, newSkill.trim()]);
-        setNewSkill('');
-      } catch (err) {
-        console.error('Error adding skill:', err);
-        alert(`Error adding skill: ${err.message}`);
-      }
+      };
+
+      openConfirmModal('Add Skill', `Add "${newSkill.trim()}" to your skills?`, performAdd);
     }
   };
 
   const removeTool = async (index) => {
     const toolToRemove = tools[index];
-    setTools(tools.filter((_, i) => i !== index));
-    
-    try {
-      const { error } = await supabase
-        .from('Skills')
-        .delete()
-        .eq('Apps', toolToRemove);
+    const performRemove = async () => {
+      setTools(tools.filter((_, i) => i !== index));
       
-      if (error) {
-        console.error('Error removing tool:', error);
-        alert(`Error removing tool: ${error.message}`);
+      try {
+        const { error } = await supabase
+          .from('Skills')
+          .delete()
+          .eq('Apps', toolToRemove);
+        
+        if (error) {
+          console.error('Error removing tool:', error);
+          alert(`Error removing tool: ${error.message}`);
+          fetchSkillsAndTools();
+        }
+      } catch (err) {
+        console.error('Error removing tool:', err);
+        alert(`Error removing tool: ${err.message}`);
         fetchSkillsAndTools();
       }
-    } catch (err) {
-      console.error('Error removing tool:', err);
-      alert(`Error removing tool: ${err.message}`);
-      fetchSkillsAndTools();
-    }
+    };
+
+    openConfirmModal('Remove Tool', `Are you sure you want to remove "${toolToRemove}"?`, performRemove);
   };
 
   const addTool = async () => {
     if (newTool.trim()) {
-      try {
-        const { error } = await supabase
-          .from('Skills')
-          .insert([{ Apps: newTool.trim() }]);
-        
-        if (error) {
-          console.error('Error adding tool:', error);
-          alert(`Error adding tool: ${error.message}`);
-          return;
+      const performAdd = async () => {
+        try {
+          const { error } = await supabase
+            .from('Skills')
+            .insert([{ Apps: newTool.trim() }]);
+          
+          if (error) {
+            console.error('Error adding tool:', error);
+            alert(`Error adding tool: ${error.message}`);
+            return;
+          }
+          
+          setTools([...tools, newTool.trim()]);
+          setNewTool('');
+        } catch (err) {
+          console.error('Error adding tool:', err);
+          alert(`Error adding tool: ${err.message}`);
         }
-        
-        setTools([...tools, newTool.trim()]);
-        setNewTool('');
-      } catch (err) {
-        console.error('Error adding tool:', err);
-        alert(`Error adding tool: ${err.message}`);
-      }
+      };
+
+      openConfirmModal('Add Tool', `Add "${newTool.trim()}" to your tools?`, performAdd);
     }
   };
 
@@ -213,45 +254,49 @@ export default function ProfileForm() {
   };
 
   const handleSave = async () => {
-    try {
-      // Save all contact links using individual states
-      const linksToSave = [
-        { title: 'Behance', url: behanceLink },
-        { title: 'LinkedIn', url: linkedinLink },
-        { title: 'GitHub', url: githubLink },
-        { title: 'Instagram', url: instagramLink }
-      ];
+    const performSave = async () => {
+      try {
+        // Save all contact links using individual states
+        const linksToSave = [
+          { title: 'Behance', url: behanceLink },
+          { title: 'LinkedIn', url: linkedinLink },
+          { title: 'GitHub', url: githubLink },
+          { title: 'Instagram', url: instagramLink }
+        ];
 
-      for (const linkData of linksToSave) {
-        const link = editableContactLinks.find(l => l.Link_Title === linkData.title);
-        if (link) {
-          const { error } = await supabase
-            .from('Contact')
-            .update({ Links: linkData.url })
-            .eq('id', link.id);
+        for (const linkData of linksToSave) {
+          const link = editableContactLinks.find(l => l.Link_Title === linkData.title);
+          if (link) {
+            const { error } = await supabase
+              .from('Contact')
+              .update({ Links: linkData.url })
+              .eq('id', link.id);
 
-          if (error) throw error;
+            if (error) throw error;
+          }
         }
+
+        // Update the editable contact links with new values
+        const updatedLinks = editableContactLinks.map(link => {
+          if (link.Link_Title === 'Behance') return { ...link, Links: behanceLink };
+          if (link.Link_Title === 'LinkedIn') return { ...link, Links: linkedinLink };
+          if (link.Link_Title === 'GitHub') return { ...link, Links: githubLink };
+          if (link.Link_Title === 'Instagram') return { ...link, Links: instagramLink };
+          return link;
+        });
+
+        setEditableContactLinks(updatedLinks);
+        setContactLinks(updatedLinks.map(link => ({ ...link })));
+        
+        console.log('Profile saved successfully!');
+        alert('Profile updated successfully!');
+      } catch (err) {
+        console.error('Error saving profile:', err);
+        alert(`Error saving profile: ${err.message}`);
       }
+    };
 
-      // Update the editable contact links with new values
-      const updatedLinks = editableContactLinks.map(link => {
-        if (link.Link_Title === 'Behance') return { ...link, Links: behanceLink };
-        if (link.Link_Title === 'LinkedIn') return { ...link, Links: linkedinLink };
-        if (link.Link_Title === 'GitHub') return { ...link, Links: githubLink };
-        if (link.Link_Title === 'Instagram') return { ...link, Links: instagramLink };
-        return link;
-      });
-
-      setEditableContactLinks(updatedLinks);
-      setContactLinks(updatedLinks.map(link => ({ ...link })));
-      
-      console.log('Profile saved successfully!');
-      alert('Profile updated successfully!');
-    } catch (err) {
-      console.error('Error saving profile:', err);
-      alert(`Error saving profile: ${err.message}`);
-    }
+    openConfirmModal('Save Changes', 'Save all your profile changes?', performSave);
   };
 
   const handleCancel = () => {
@@ -290,19 +335,7 @@ export default function ProfileForm() {
           <div className="profile-form-grid">
             {/* Left Column */}
             <div className="profile-form-column">
-              {/* Introduction */}
-              <div className="form-field">
-                <label className="form-label">
-                  Introduction <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter Introduction"
-                  value={introduction}
-                  onChange={(e) => setIntroduction(e.target.value)}
-                  className="form-input"
-                />
-              </div>
+
 
               {/* Socials */}
               <div className="socials-section">
@@ -486,6 +519,24 @@ export default function ProfileForm() {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="confirm-modal-overlay">
+          <div className="confirm-modal">
+            <h2 className="confirm-modal-title">{confirmTitle}</h2>
+            <p className="confirm-modal-message">{confirmMessage}</p>
+            <div className="confirm-modal-buttons">
+              <button onClick={closeConfirmModal} className="confirm-modal-cancel">
+                Cancel
+              </button>
+              <button onClick={handleConfirm} className="confirm-modal-confirm">
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

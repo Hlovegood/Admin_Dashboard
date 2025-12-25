@@ -116,6 +116,12 @@ const ProjectForm = () => {
   const [caseImg2, setCaseImg2] = useState("");
   const [caseImg3, setCaseImg3] = useState("");
 
+  // Confirmation Modal states
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [confirmTitle, setConfirmTitle] = useState('');
+  const [confirmMessage, setConfirmMessage] = useState('');
+
   const t = translations[language];
 
   useEffect(() => {
@@ -233,98 +239,125 @@ const ProjectForm = () => {
     else if (index === 2) setCaseImg3("");
   };
 
-  const handleSubmit = async () => {
-    try {
-      const updateData = {
-        Title: title,
-        Role: role,
-        Time: time,
-        Year: year,
-        Apps: apps,
-        Impact_1: impact1,
-        Impact_2: impact2,
-        Impact_3: impact3,
-        Sub: sub,
-        Research: research,
-        Proto: proto,
-        Dev: dev,
-        Vis: vis,
-        Flow: flow,
-        Brand: brand,
-        Ovr: ovr,
-        Prob: prob,
-        Sol: sol,
-        ProjectCategory: projectCategory,
-        slug: slug,
-        CoverImg: preview,
-        Case_Img_1: caseImg1,
-        Case_Img_2: caseImg2,
-        Case_Img_3: caseImg3,
-      };
+  const openConfirmModal = (title, message, action) => {
+    setConfirmTitle(title);
+    setConfirmMessage(message);
+    setConfirmAction(() => action);
+    setShowConfirmModal(true);
+  };
 
-      const { error } = await supabase
-        .from("Project Details")
-        .update(updateData)
-        .eq("id", id);
+  const closeConfirmModal = () => {
+    setShowConfirmModal(false);
+    setConfirmAction(null);
+  };
 
-      if (error) {
-        console.error("Error updating project:", error);
-        alert(`Error updating project: ${error.message}`);
-      } else {
-        console.log("Form Data:", updateData);
-        alert("Project published successfully!");
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Error updating project!");
+  const handleConfirm = async () => {
+    if (confirmAction) {
+      await confirmAction();
     }
+    closeConfirmModal();
+  };
+
+  const handleSubmit = async () => {
+    const performUpdate = async () => {
+      try {
+        const updateData = {
+          Title: title,
+          Role: role,
+          Time: time,
+          Year: year,
+          Apps: apps,
+          Impact_1: impact1,
+          Impact_2: impact2,
+          Impact_3: impact3,
+          Sub: sub,
+          Research: research,
+          Proto: proto,
+          Dev: dev,
+          Vis: vis,
+          Flow: flow,
+          Brand: brand,
+          Ovr: ovr,
+          Prob: prob,
+          Sol: sol,
+          ProjectCategory: projectCategory,
+          slug: slug,
+          CoverImg: preview,
+          Case_Img_1: caseImg1,
+          Case_Img_2: caseImg2,
+          Case_Img_3: caseImg3,
+        };
+
+        const { error } = await supabase
+          .from("Project Details")
+          .update(updateData)
+          .eq("id", id);
+
+        if (error) {
+          console.error("Error updating project:", error);
+          alert(`Error updating project: ${error.message}`);
+        } else {
+          console.log("Form Data:", updateData);
+          alert("Project published successfully!");
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("Error updating project!");
+      }
+    };
+
+    openConfirmModal('Update Project', 'Are you sure you want to update this project?', performUpdate);
   };
 
   const handleSaveDraft = async () => {
-    try {
-      const updateData = {
-        Title: title,
-        Role: role,
-        Time: time,
-        Year: year,
-        Apps: apps,
-        Impact_1: impact1,
-        Impact_2: impact2,
-        Impact_3: impact3,
-        Sub: sub,
-        Research: research,
-        Proto: proto,
-        Dev: dev,
-        Vis: vis,
-        Flow: flow,
-        Brand: brand,
-        Ovr: ovr,
-        Prob: prob,
-        Sol: sol,
-        ProjectCategory: projectCategory,
-        slug: slug,
-        CoverImg: preview,
-        Case_Img_1: caseImg1,
-        Case_Img_2: caseImg2,
-        Case_Img_3: caseImg3,
-        status: "draft"
-      };
+    const performSaveDraft = async () => {
+      try {
+        const updateData = {
+          Title: title,
+          Role: role,
+          Time: time,
+          Year: year,
+          Apps: apps,
+          Impact_1: impact1,
+          Impact_2: impact2,
+          Impact_3: impact3,
+          Sub: sub,
+          Research: research,
+          Proto: proto,
+          Dev: dev,
+          Vis: vis,
+          Flow: flow,
+          Brand: brand,
+          Ovr: ovr,
+          Prob: prob,
+          Sol: sol,
+          ProjectCategory: projectCategory,
+          slug: slug,
+          CoverImg: preview,
+          Case_Img_1: caseImg1,
+          Case_Img_2: caseImg2,
+          Case_Img_3: caseImg3,
+          status: "draft"
+        };
 
-      const { error } = await supabase
-        .from("Project Details")
-        .update(updateData)
-        .eq("id", id);
+        const { error } = await supabase
+          .from("Project Details")
+          .update(updateData)
+          .eq("id", id);
 
-      if (error) {
-        console.error("Error saving draft:", error);
-        alert(`Error saving draft: ${error.message}`);
-      } else {
-        alert("Draft saved successfully!");
+        if (error) {
+          console.error("Error saving draft:", error);
+          alert(`Error saving draft: ${error.message}`);
+        } else {
+          alert("Draft saved successfully!");
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("Error saving draft!");
       }
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Error saving draft!");
-    }
+    };
+
+    openConfirmModal('Save Draft', 'Save this project as a draft?', performSaveDraft);
   };
 
   const handleCancel = () => {
@@ -707,6 +740,24 @@ const ProjectForm = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="confirm-modal-overlay">
+          <div className="confirm-modal">
+            <h2 className="confirm-modal-title">{confirmTitle}</h2>
+            <p className="confirm-modal-message">{confirmMessage}</p>
+            <div className="confirm-modal-buttons">
+              <button onClick={closeConfirmModal} className="confirm-modal-cancel">
+                Cancel
+              </button>
+              <button onClick={handleConfirm} className="confirm-modal-confirm">
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
